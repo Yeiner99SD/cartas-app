@@ -1,5 +1,8 @@
 ---
 import "../styles/global.css";
+import '@fontsource-variable/mulish';
+
+
 ---
 
 <!doctype html>
@@ -16,11 +19,20 @@ import "../styles/global.css";
 	</body>
 </html>
 
-<style>
+<style is:global>
 	html,
 	body {
 		margin: 0;
 		width: 100%;
 		height: 100%;
+		 background: linear-gradient(
+    to bottom,
+    #843AAF 12%,
+    #999999 100%
+  );
+	}
+
+	h1{
+		font-family: 'Mulish Variable', sans-serif;
 	}
 </style>
