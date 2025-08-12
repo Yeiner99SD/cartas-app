@@ -1,0 +1,115 @@
+<div class="flex flex-col items-center justify-center min-h-screen px-6 text-center pb-16">
+  
+  <!-- Texto de bienvenida -->
+  <div class="mb-12 max-w-2xl">
+    <h1 class="text-white text-3xl font-semibold mb-2">
+      Bienvenida, este es tu sitio exclusivo &lt;3
+    </h1>
+    <p class="text-white/80 text-sm">
+      Accede con tus credenciales exclusivas y puedes ver tus cartas por siempre.
+    </p>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-5xl w-full">
+    
+    <!-- Columna izquierda: imagen carta -->
+    <div class="flex justify-center">
+      <img src="/carta.webp" alt="Carta" class="max-w-[200px] sm:max-w-xs" />
+    </div>
+
+    <!-- Columna derecha: formulario -->
+    <div class="relative border border-white/60 p-8 rounded-sm mx-auto max-w-sm w-full">
+      
+      <!-- Corazón arriba derecha -->
+      <img 
+        src="/corazones.webp" 
+        alt="Corazón" 
+        class="absolute top-0 right-0 w-10 -translate-y-1/2 translate-x-1/2 sm:w-12"
+      />
+
+      <!-- Corazón abajo izquierda -->
+      <img 
+        src="/corazones.webp" 
+        alt="Corazón" 
+        class="absolute bottom-0 left-0 w-10 translate-y-1/3 -translate-x-1/2 sm:w-12"
+      />
+
+      <h2 class="text-white text-lg font-semibold text-center mb-6 italic">
+        INICIO DE SESIÓN
+      </h2>
+      <!-- Mensaje de error -->
+      <div id="error-message" class="hidden mb-4 p-3 bg-red-500/20 border border-red-500/50 text-red-200 text-sm rounded">
+      </div>
+
+      <form id="login-form" class="flex flex-col gap-4">
+        <input 
+          id="username"
+          type="text" 
+          placeholder="usuario" 
+          class="px-4 py-2 bg-transparent border border-white/60 text-white italic placeholder-white/80 focus:outline-none focus:border-white"
+          required
+        />
+        <input 
+          id="password"
+          type="password" 
+          placeholder="contraseña" 
+          class="px-4 py-2 bg-transparent border border-white/60 text-white italic placeholder-white/80 focus:outline-none focus:border-white"
+          required
+        />
+        <button 
+          type="submit" 
+          class="mt-4 px-4 py-2 bg-white text-purple-700 font-semibold hover:bg-purple-200 transition-colors"
+        >
+          Ingresar
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const loginForm = document.getElementById('login-form') as HTMLFormElement;
+  const usernameInput = document.getElementById('username') as HTMLInputElement;
+  const passwordInput = document.getElementById('password') as HTMLInputElement;
+  const errorMessage = document.getElementById('error-message') as HTMLElement;
+
+  function showError(message: string) {
+    errorMessage.textContent = message;
+    errorMessage.classList.remove('hidden');
+  }
+
+  function hideError() {
+    errorMessage.classList.add('hidden');
+  }
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    // Validación súper simple
+    if (username === 'Dania' && password === 'Dania') {
+      // Guardar en localStorage que está logueado
+      localStorage.setItem('isLoggedIn', 'true');
+      // Redirigir al dashboard
+      window.location.href = '/home';
+    } else {
+      showError('Uyyy te equivocaste, intenta otra vez');
+    }
+  });
+
+  // Limpiar error cuando escriba
+  usernameInput.addEventListener('input', hideError);
+  passwordInput.addEventListener('input', hideError);
+
+  // Si ya está logueado, redirigir
+  if (localStorage.getItem('isLoggedIn') === 'true') {
+    window.location.href = '/dashboard';
+  }
+</script>
+
+
+
