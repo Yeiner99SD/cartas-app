@@ -1,0 +1,12 @@
+---
+import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
+import Dashboard from "../sections/Dashboard.astro";
+import ProtectedRoute from "../components/ProtectedRoute.astro";
+---
+
+<Layout>
+    <ProtectedRoute />
+    <Header/>
+    <Dashboard/>
+</Layout>

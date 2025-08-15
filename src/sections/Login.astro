@@ -70,6 +70,8 @@
 </div>
 
 <script>
+  import '../components/ProtectedRoute.astro';
+  
   const loginForm = document.getElementById('login-form') as HTMLFormElement;
   const usernameInput = document.getElementById('username') as HTMLInputElement;
   const passwordInput = document.getElementById('password') as HTMLInputElement;
@@ -101,13 +103,17 @@
     }
   });
 
+
+  
+  
+
   // Limpiar error cuando escriba
   usernameInput.addEventListener('input', hideError);
   passwordInput.addEventListener('input', hideError);
 
   // Si ya está logueado, redirigir
   if (localStorage.getItem('isLoggedIn') === 'true') {
-    window.location.href = '/dashboard';
+    window.location.href = '/home';
   }
 </script>
 

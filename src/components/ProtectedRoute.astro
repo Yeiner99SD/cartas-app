@@ -1,0 +1,17 @@
+---
+---
+
+<script>
+  function checkAuth() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (!isLoggedIn && window.location.pathname === '/home') {
+      window.location.href = '/';
+    }
+  }
+
+  // Verificar al cargar la página
+  checkAuth();
+
+  // Verificar cuando el estado de navegación cambie
+  window.addEventListener('popstate', checkAuth);
+</script>

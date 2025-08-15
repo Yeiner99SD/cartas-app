@@ -1,0 +1,29 @@
+---
+import "../styles/global.css";
+
+---
+
+
+<header class="fixed top-0 left-0 right-0 z-50">
+  <nav class="flex justify-between items-center px-6 py-4">
+    <div class="flex gap-6 text-white">
+      <a href="/home" class="hover:text-white/80 transition-colors">Mis cartas</a>
+      <a href="/nuestras-cositas" class="hover:text-white/80 transition-colors">Nuestras cositas</a>
+    </div>
+    <button 
+      id="logout-btn"
+      class="hover:cursor-pointer px-4 py-2 text-sm bg-white text-purple-700 hover:text-purple-400 font-semibold transition-colors"
+    >
+      Cerrar sesión
+    </button>
+  </nav>
+</header>
+
+<script>
+  const logoutBtn = document.getElementById('logout-btn');
+  
+  logoutBtn?.addEventListener('click', () => {
+    localStorage.removeItem('isLoggedIn');
+    window.location.href = '/';
+  });
+</script>

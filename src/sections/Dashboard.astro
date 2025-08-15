@@ -1,0 +1,40 @@
+---
+import CardPreview from "../components/CardPreview.astro";
+
+const cartas = [
+  {
+    title: "Gongolí",
+    text: "SEMBRÉ ALGODÓN Y COSECHÉ UNA NUBE",
+  },
+  {
+    title: "Marla singer",
+    text: "SEMBRÉ ALGODÓN Y COSECHÉ UNA NUBE",
+  },
+  {
+    title: "Dulce carita",
+    text: "SEMBRÉ ALGODÓN Y COSECHÉ UNA NUBE",
+  },
+];
+---
+
+<section class="px-6 py-16">
+  <!-- Título con iconos de corazón -->
+  <div class="flex flex-col items-center justify-center gap-2 mb-12 mt-12">
+    <div class="flex items-center gap-2">
+      <img src="/corazones.webp" alt="Corazón" class="w-8 h-8" />
+      <h1 class="text-[#4C0967] text-3xl font-medium text-center">
+        Tus
+        <br/>
+        Cartas :)
+      </h1>
+      <img src="/corazones.webp" alt="Corazón" class="w-8 h-8" />
+    </div>
+  </div>
+
+  <!-- Grid de cartas -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    {cartas.map(carta => (
+      <CardPreview {...carta} />
+    ))}
+  </div>
+</section>
