@@ -1,23 +1,10 @@
 ---
 import CardPreview from "../components/CardPreview.astro";
 
-const cartas = [
-  {
-    title: "Gongolí",
-    text: "SEMBRÉ ALGODÓN Y COSECHÉ UNA NUBE",
-  },
-  {
-    title: "Marla singer",
-    text: "SEMBRÉ ALGODÓN Y COSECHÉ UNA NUBE",
-  },
-  {
-    title: "Dulce carita",
-    text: "SEMBRÉ ALGODÓN Y COSECHÉ UNA NUBE",
-  },
-];
+import { cartas } from "../data/cartas";
 ---
+<section class="px-6 py-16 min-h-screen flex flex-col justify-center">
 
-<section class="px-6 py-16">
   <!-- Título con iconos de corazón -->
   <div class="flex flex-col items-center justify-center gap-2 mb-12 mt-12">
     <div class="flex items-center gap-2">
@@ -37,4 +24,12 @@ const cartas = [
       <CardPreview {...carta} />
     ))}
   </div>
+
+
+    <!-- Nota -->
+  <p class="mt-8 text-center text-sm font-medium text-white">
+    Nota: Podrás ver más cartas en el transcurso de los meses, solo ingresa tus
+    credenciales y te darás cuenta que las habrán, te quiero :3 <br />
+    <span class="font-bold">Att: Tu hombre</span>
+  </p>
 </section>

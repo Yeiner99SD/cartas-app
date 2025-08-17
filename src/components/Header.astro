@@ -1,29 +1,75 @@
 ---
 import "../styles/global.css";
-
 ---
 
-
 <header class="fixed top-0 left-0 right-0 z-50">
-  <nav class="flex justify-between items-center px-6 py-4">
-    <div class="flex gap-6 text-white">
+  <nav class="flex justify-around items-center px-6 py-4 bg-transparent">
+    <!-- Links Desktop -->
+    <div id="nav-links" class="hidden md:flex gap-6 text-white">
       <a href="/home" class="hover:text-white/80 transition-colors">Mis cartas</a>
       <a href="/nuestras-cositas" class="hover:text-white/80 transition-colors">Nuestras cositas</a>
     </div>
+
+    <!-- Botón logout (desktop) -->
     <button 
-      id="logout-btn"
+      id="logout-btn-desktop"
+      class="hidden md:block hover:cursor-pointer px-4 py-2 text-sm bg-white text-purple-700 hover:text-purple-400 font-semibold transition-colors"
+    >
+      Cerrar sesión
+    </button>
+
+    <!-- Botón hamburguesa (solo mobile) -->
+    <button id="menu-toggle" class="md:hidden text-white text-2xl focus:outline-none">
+      ☰
+    </button>
+  </nav>
+
+  <!-- Menú Mobile -->
+  <div id="mobile-menu" 
+    class="hidden flex flex-col justify-center items-center gap-6 text-white absolute top-0 left-0 w-full h-screen bg-black/70 backdrop-blur-md z-50">
+    
+    <button id="menu-close" class="absolute top-5 right-6 text-3xl text-white">✕</button>
+
+    <a href="/home" class="hover:text-white/80 transition-colors">Mis cartas</a>
+    <a href="/nuestras-cositas" class="hover:text-white/80 transition-colors">Nuestras cositas</a>
+    
+    <button 
+      id="logout-btn-mobile"
       class="hover:cursor-pointer px-4 py-2 text-sm bg-white text-purple-700 hover:text-purple-400 font-semibold transition-colors"
     >
       Cerrar sesión
     </button>
-  </nav>
+  </div>
 </header>
 
 <script>
-  const logoutBtn = document.getElementById('logout-btn');
-  
-  logoutBtn?.addEventListener('click', () => {
+  const menuToggle = document.getElementById("menu-toggle");
+  const menuClose = document.getElementById("menu-close");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const navLinks = document.getElementById("nav-links");
+
+  menuToggle.addEventListener("click", () => {
+    mobileMenu.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden"); // bloquear scroll
+  });
+
+  menuClose.addEventListener("click", () => {
+    mobileMenu.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden"); // habilitar scroll
+  });
+</script>
+
+<script>
+  // Función para cerrar sesión
+  const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     window.location.href = '/';
-  });
+  };
+
+  // Aplicar el evento a ambos botones
+  const logoutBtnDesktop = document.getElementById('logout-btn-desktop');
+  const logoutBtnMobile = document.getElementById('logout-btn-mobile');
+
+  logoutBtnDesktop?.addEventListener('click', handleLogout);
+  logoutBtnMobile?.addEventListener('click', handleLogout);
 </script>
