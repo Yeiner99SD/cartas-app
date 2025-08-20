@@ -1,0 +1,70 @@
+---
+---
+
+<section class="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-16 overflow-hidden">
+  <!-- Título -->
+  <h2 
+    class="text-3xl md:text-5xl font-bold italic text-pink-200 drop-shadow-lg mb-6 opacity-0  transition-all duration-1000 ease-out scroll-fade-in"
+  >
+    Tú eres mi gongoli :3
+  </h2>
+
+  <!-- Texto -->
+  <p 
+    class="text-base md:text-xl text-pink-100 max-w-3xl leading-relaxed opacity-0 transition-all duration-1000 ease-out delay-300 scroll-fade-in"
+  >
+    Gongoli, tú eres mi gongoli, eres la chica con la que quiero vivir y morir con una casita en el cielo. 
+    La letra es perfecta, como tú; cada verso expresa lo que yo siento por ti, cada melodía es un manjar, 
+    es como escuchar tu voz. Esta obra de arte se asemeja a tus ojitos preciosos y no solo a tus ojos, 
+    a tu carita preciosa, pero no solo eso, a ti completa, eso eres: una obra de arte como Gongoli. <br /><br />
+
+    Eres tan perfecta que siempre que vaya a escuchar esta parte me acordaré de ti:  
+    <span class="italic text-pink-200">
+      "En mar pica'o eres mi barquito 'e vela,  
+      Mi bella Isabela, palito blanco pa' mi Nutella.  
+      Estrellas brillan cuando te tengo de frente,  
+      Los planetas se alinean si me enseñas tus dientes.  
+      Con luces de colores, por tu sonrisa,  
+      Frío rico que le decimos brisa.  
+      Mi piel erizas, sin que la roces,  
+      Que me pones a hablar el idioma de los dioses.  
+      Eres dulce 'e coco que del suelo me eleva,  
+      Y me lleva a lo más alto, sin escaleras.  
+      Quiero dibujarte un nido de pichoncitos,  
+      Pa' ahí vivir contigo hasta que seamos viejitos, yo."
+    </span>
+    <br /><br />
+
+    Al escribirte esto, quiero expresarte mi más sincero amor por ti, quiero que seas mi gongoli por siempre.  
+    <br /><br />
+    <span class="font-bold text-pink-200">Yei te dice que eres perfecta y siempre lo serás. Mi gongoli ❤️</span>
+  </p>
+
+  <!-- Firma -->
+  <p 
+    class="mt-10 text-sm md:text-lg text-pink-300 italic opacity-0 translate-x-20 transition-all duration-1000 ease-out delay-600 scroll-fade-in"
+  >
+    — Escrito por Yei
+  </p>
+</section>
+
+<style>
+  /* Animación de aparición desde la derecha */
+  .scroll-fade-in.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  // Detectar scroll y aplicar animación
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+</script>

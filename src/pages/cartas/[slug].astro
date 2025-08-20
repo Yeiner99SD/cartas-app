@@ -1,31 +1,37 @@
 ---
-// src/pages/cartas/[slug].astro
-import { cartas } from '../../data/cartas'; // Ajusta la ruta según tu estructura
-import Layout from '../../layouts/Layout.astro';
+import LayoutCarta from '../../layouts/LayoutCarta.astro';
+import { cartas } from '../../data/cartas';
 
-// getStaticPaths es obligatorio para rutas dinámicas
 export async function getStaticPaths() {
   return cartas.map((carta) => ({
     params: { slug: carta.slug },
-    props: { carta }, // Pasamos la carta completa como prop
+    props: { carta },
   }));
 }
 
-// Obtener la carta desde las props (ya no necesitamos buscarla)
 const { carta } = Astro.props;
+
+// Importar dinámicamente los componentes
+const components = await Promise.all(
+  carta.components.map(async (componentName) => {
+    try {
+      const module = await import(`../../sections/${carta.slug}/${componentName}.astro`);
+      return module.default;
+    } catch (error) {
+      console.error(`Error loading component ${componentName} for ${carta.slug}:`, error);
+      return null;
+    }
+  })
+);
+
+// Filtrar componentes que se cargaron exitosamente
+const validComponents = components.filter(Boolean);
 ---
 
-
-<Layout>
-    <section class="px-6 py-16 min-h-screen flex flex-col items-center">
-        <!-- Título de la carta -->
-        <h1 class="text-3xl font-bold text-[#4C0967] mb-8">{carta.title}</h1>
-    
-        <!-- Contenido de la carta -->
-        <article class="bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full">
-        <img src={carta.image} alt={carta.title} class="w-full h-48 object-cover rounded-t-lg mb-4" />
-        <p class="text-gray-700 mb-4">{carta.text}</p>
-        <p class="text-sm text-gray-500">De: {carta.from} → Para: {carta.to}</p>
-        </article>
-    </section>
-</Layout>
+<LayoutCarta title={carta.title}>
+  <section class="min-h-screen">
+    {validComponents.map((Component) => 
+      <Component />
+    )}
+  </section>
+</LayoutCarta>

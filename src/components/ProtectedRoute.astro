@@ -4,7 +4,10 @@
 <script>
   function checkAuth() {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (!isLoggedIn && window.location.pathname === '/home') {
+    const currentPath = window.location.pathname;
+    
+    // Verifica si no está logueado y está intentando acceder a rutas protegidas
+    if (!isLoggedIn && (currentPath === '/home' || currentPath.startsWith('/cartas/'))) {
       window.location.href = '/';
     }
   }

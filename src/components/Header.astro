@@ -48,15 +48,23 @@ import "../styles/global.css";
   const mobileMenu = document.getElementById("mobile-menu");
   const navLinks = document.getElementById("nav-links");
 
-  menuToggle.addEventListener("click", () => {
-    mobileMenu.classList.remove("hidden");
-    document.body.classList.add("overflow-hidden"); // bloquear scroll
-  });
+  if (menuToggle) {
+    menuToggle.addEventListener("click", () => {
+      if (mobileMenu) {
+        mobileMenu.classList.remove("hidden");
+      }
+      document.body.classList.add("overflow-hidden"); // bloquear scroll
+    });
+  }
 
-  menuClose.addEventListener("click", () => {
-    mobileMenu.classList.add("hidden");
-    document.body.classList.remove("overflow-hidden"); // habilitar scroll
-  });
+  if (menuClose) {
+    menuClose.addEventListener("click", () => {
+      if (mobileMenu) {
+        mobileMenu.classList.add("hidden");
+      }
+      document.body.classList.remove("overflow-hidden"); // habilitar scroll
+    });
+  }
 </script>
 
 <script>
