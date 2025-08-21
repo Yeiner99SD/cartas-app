@@ -10,12 +10,12 @@ interface Carta {
 
 export const cartas: Carta[] = [
   {
-    title: "Gongoli",
+    title: "Gongoli 🫧☁️ ",
     image: "/gongolibg.webp",
     slug: "gongoli",
-    from: "Tu hombre",
-    to: "Gongoló",
-    text: "Sembré algodón y coseché una nube.",
+    from: "Yei",
+    to: "Dania :) ",
+    text: "Sembré algodón y coseché una nube. ",
     components: [
       'HeroGongoli',
       'Content1',

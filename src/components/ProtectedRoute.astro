@@ -7,7 +7,7 @@
     const currentPath = window.location.pathname;
     
     // Verifica si no está logueado y está intentando acceder a rutas protegidas
-    if (!isLoggedIn && (currentPath === '/home' || currentPath.startsWith('/cartas/'))) {
+    if (!isLoggedIn && (currentPath === '/home' || currentPath.startsWith('/cartas/') || currentPath.startsWith('/nuestras-cositas') )) {
       window.location.href = '/';
     }
   }
