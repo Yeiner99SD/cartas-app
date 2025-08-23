@@ -1,0 +1,63 @@
+---
+---
+
+<section class="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-16 overflow-hidden">
+  <!-- Título -->
+  <h2 
+    class="text-3xl md:text-5xl font-bold italic drop-shadow-lg mb-6 opacity-0 transition-all duration-1000 ease-out scroll-fade-in text-pink-200"
+  >
+    Marla Singer, mi deseo por ti es enorme.
+  </h2>
+
+  <!-- Texto -->
+  <p 
+    class="text-base md:text-xl max-w-3xl leading-relaxed opacity-0 transition-all duration-1000 ease-out delay-300 scroll-fade-in text-pink-100"
+  >
+    Mi deseo por ti no se compara a nada, es algo enorme, y muy notorio cuando lo siento.  
+    Me atraes de manera tan poderosa como un agujero negro a sus órbitas.  
+    Eres el deseo que siempre quiero tener como la luna siempre órbita el planeta,  
+    no quiero que sea algo que se complazca tan fácil, quiero que este deseo permanezca siempre en mi cabeza  
+    y que al momento de cumplirlo vuelva a quererlo.  
+
+    El deseo, el anhelo y la conexión física es una de las cosas que brinda Marla Singer y contigo se siente muy fuerte.  
+    La conexión amorosa contigo y la conexión de deseo es lo que me impulsa a luchar cada día.  
+    <br /><br />
+
+    Eres tan perfecta como sentir el roce de tu piel y erizarme.  
+    <span class="font-bold ">Tus labios son rock and roll</span>  
+    y estoy seguro que al besarnos se siente como ganar un super Bowl,  
+    tus pantie, es como la portada de Rolling Stone,  
+    pero para mí sin ellos eres más perfecta, quiero estar contigo siempre.  
+    <br /><br />
+
+    Marla Singer, mi deseo por ti es muy intenso.  
+  </p>
+
+  <!-- Firma -->
+  <p 
+    class="mt-10 text-sm md:text-lg text-pink-300 italic opacity-0 translate-x-20 transition-all duration-1000 ease-out delay-600 scroll-fade-in"
+  >
+    — Escrito por Yei
+  </p>
+</section>
+
+<style>
+  /* Animación de aparición desde la derecha */
+  .scroll-fade-in.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  // Detectar scroll y aplicar animación
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+</script>

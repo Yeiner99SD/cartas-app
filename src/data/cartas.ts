@@ -27,27 +27,29 @@ export const cartas: Carta[] = [
   {
     title: "Marla Singer",
     slug: "marla-singer",
-    image: "/gongolibg.webp",
+    image: "/msbg.webp",
     from: "Tu hombre",
-    to: "Marla",
-    text: "En cada carta hay un pedacito de mí esperándote.",
+    to: "La mujer mas hermosa",
+    text: "Tus labios son rock and roll :3 ",
     components: [
       'HeroMarla',
-      'ContentMarla1',
-      'ContentMarla2'
+      'ContentMS1',
+      'ContentMS2',
+      'ContentMS3',
+      'ReflecionMarla',
     ]
   },
   {
-    title: "Dulce carita",
-    image: "/gongolibg.webp",
-    slug: "dulce-carita",
+    title: "Tus Ojitos",
+    image: "/bgojitoslindos.webp",
+    slug: "ojitos-lindos",
     from: "Tu hombre",
-    to: "Dulce",
-    text: "Tus sonrisas son la tinta con la que escribo mi felicidad.",
+    to: "Mi mujer",
+    text: "Tus ojos son la tinta con la que escribo",
     components: [
-      'HeroDulce',
-      'ContentDulce1',
-      'ContentDulce2'
+      'HeroOjitos',
+      'ContentOjitos',
+    
     ]
   }
 ];

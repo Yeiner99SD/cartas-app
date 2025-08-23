@@ -1,0 +1,63 @@
+---
+---
+
+<section class="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-16 overflow-hidden">
+  <!-- Título -->
+  <h2 
+    class="text-3xl md:text-5xl font-bold italic text-pink-200 drop-shadow-lg mb-6 opacity-0  transition-all duration-1000 ease-out scroll-fade-in"
+  >
+    La mirada que inspira <br /> <span class="text-lg md:text-2xl font-normal">18/08/25</span>
+  </h2>
+
+  <!-- Texto -->
+  <p 
+    class="text-base md:text-xl text-pink-100 max-w-3xl leading-relaxed opacity-0 transition-all duration-1000 ease-out delay-300 scroll-fade-in"
+  >
+    Tu mirada es mi fuente de inspiración. Cada vez que me miras, siento una inmensa corazonada. 
+    Quiero expresarlo todo, pero también soy muy feliz con el no decir nada y solo interactuar con ese contacto visual. 
+    Ese contacto me hace de alguna manera acercarme más a ti, y también enamorarme más de ti. <br /><br />
+
+    Siento que tu mirada irradia tanto que no hay explicación para ello. Soy de los hombres más privilegiados, 
+    tú con el simple hecho de existir me incitas a ganar todo, mis batallas. Te quiero hoy, mañana y así mismo todos los días 
+    de tu existencia, con lo que hay después. <br /><br />
+
+    Tus ojos cafés, tus cejas expresivas, tu sonrisa que me domina y tus dientes, que son como ver un paisaje de montañas 
+    con el atardecer en marcha. Cada uno de estos factores y componentes tuyos son el motor para mi corazón e inspiración 
+    a mi mente, para poder expresarme. <span class="italic text-pink-200">"Dios se lució creándote".</span> <br /><br />
+
+    Tus ojos siempre serán mi fuente de inspiración y con el deseo de poder mirarlos fijamente en cualquier circunstancia, 
+    harán que yo cumpla ese propósito. El hecho de solo mirarte hace que mi corazón se acelere y le dé fuerzas a mi ser para 
+    lograr todas las cosas bellas y todo lo necesario para hacerte muy feliz. <br /><br />
+
+    Vuelvo a repetir <span class="font-bold text-pink-200">TE QUIERO MUCHÍSIMO</span> en mayúsculas Dania 
+    y siempre te haré recordar eso. Besos ♡
+  </p>
+
+  <!-- Firma -->
+  <p 
+    class="mt-10 text-sm md:text-lg text-pink-300 italic opacity-0 translate-x-20 transition-all duration-1000 ease-out delay-600 scroll-fade-in"
+  >
+    — Escrito por Yei
+  </p>
+</section>
+
+<style>
+  /* Animación de aparición desde la derecha */
+  .scroll-fade-in.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  // Detectar scroll y aplicar animación
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+</script>

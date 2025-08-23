@@ -1,0 +1,47 @@
+---
+---
+
+<div class="relative flex flex-col items-center justify-center min-h-screen text-center p-4">
+  <!-- Texto -->
+  <h1 class="text-3xl sm:text-5xl font-bold drop-shadow-lg">
+    TU PANTIE LA PORTADA <br /> DE  <br /> ROLLING STONE
+    <br>
+    (Los que me robaré)
+  </h1>
+
+  <!-- Corazones -->
+  <img 
+    src="/corazones.webp" 
+    alt="corazón" 
+    class="absolute top-10 left-10 w-10 sm:w-14 animate-heartbeat"
+  />
+  <img 
+    src="/corazones.webp" 
+    alt="corazón" 
+    class="absolute top-20 right-10 w-10 sm:w-14 animate-heartbeat delay-300"
+  />
+
+  <!-- Imagen de labios -->
+  <img 
+    src="/pantie.webp" 
+    alt="Labios rock and roll" 
+    class="mt-10 w-20 sm:w-32 md:w-40 drop-shadow-lg"
+  />
+</div>
+
+<style>
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.2); }
+  }
+
+  .animate-heartbeat {
+    animation: heartbeat 1s infinite;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+</style>

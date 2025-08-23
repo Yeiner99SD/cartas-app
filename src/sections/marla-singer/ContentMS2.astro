@@ -1,0 +1,52 @@
+---
+---
+
+<div class="relative flex flex-col items-center justify-center min-h-screen text-center p-4">
+  <!-- Texto -->
+  <h1 class="text-3xl sm:text-5xl font-bold drop-shadow-lg">
+    MORDERLOS <br /> ES COMO <br /> GANAR EL <br /> SUPER BOWL
+  </h1>
+
+  <!-- Corazones -->
+  <img 
+    src="/corazones.webp" 
+    alt="corazón" 
+    class="absolute top-10 left-10 w-10 sm:w-14 animate-heartbeat"
+  />
+  <img 
+    src="/corazones.webp" 
+    alt="corazón" 
+    class="absolute bottom-10 right-10 w-10 sm:w-14 animate-heartbeat delay-300"
+  />
+
+  <!-- Emoji (morder labios) -->
+  <img 
+    src="/morderlabios.webp" 
+    alt="emoji morder labios" 
+    class="absolute top-20 right-14 w-14 sm:w-20 md:w-24 drop-shadow-lg"
+  />
+
+  <!-- Trofeo Super Bowl -->
+  <img 
+    src="/superbw.webp" 
+    alt="Trofeo Super Bowl" 
+    class="absolute bottom-20 left-14 w-16 sm:w-24 md:w-28 drop-shadow-lg"
+  />
+</div>
+
+<style>
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.2); }
+  }
+
+  .animate-heartbeat {
+    animation: heartbeat 1s infinite;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+</style>
