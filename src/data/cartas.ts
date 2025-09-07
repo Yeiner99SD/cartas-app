@@ -51,5 +51,17 @@ export const cartas: Carta[] = [
       'ContentOjitos',
     
     ]
+  },
+  {
+    title: "Mi Niña Hermosa",
+    image: "/bgnb.webp",
+    slug: "mi-niña-hermosa",
+    from: "Tu hombre",
+    to: "Mi novia :3 ",
+    text: "Mi 29.5 eres tan especial y tan linda que no hay palabras para describir lo mucho que te quiero :3 ",
+    components: [
+      'HeroNiñaHermosa',
+      'ContentNiñaHermosa',
+    ]
   }
 ];

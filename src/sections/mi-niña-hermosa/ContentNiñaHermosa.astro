@@ -1,0 +1,53 @@
+---
+---
+
+<section class="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-16 overflow-hidden">
+  <!-- Título -->
+  <h2 
+    class="text-3xl md:text-5xl font-bold italic text-pink-200 drop-shadow-lg mb-6 opacity-0 transition-all duration-1000 ease-out scroll-fade-in"
+  >
+    Mi niña hermosa
+  </h2>
+
+  <!-- Texto -->
+  <p 
+    class="text-base md:text-xl text-pink-100 max-w-3xl leading-relaxed opacity-0 transition-all duration-1000 ease-out delay-300 scroll-fade-in"
+  >
+    Mi niña hermosa, escribo esto un 6/09/25 solo para recordarte lo que siento cada día: que te quiero con todo mi corazón y que me encantas. Desde que te conocí nació en mí un sentimiento difícil de describir, algo tan grande que me hizo experimentar emociones que jamás había sentido.
+    <br /><br />
+    Desde nuestras primeras interacciones y mensajes, ese algo empezó a crecer, y hoy sigue siendo la fuerza que alimenta mi amor por ti. Cada día me enamoro más de tu forma de ser, de tu existencia misma, y ese sentimiento se hace más fuerte con el tiempo.
+    <br /><br />
+    Quiero que sepas que soy el hombre más feliz del mundo a tu lado y que siempre estaré aquí para ti, dispuesto a conocerte y enamorarme más de mi niña linda.
+    <br /><br />
+    Con este pequeño texto solo quiero decirte que lo que siento por ti es lo más bonito y real que he vivido. 
+    <span class="font-bold text-pink-200">Te quiero 29.5 💕</span>
+  </p>
+
+  <!-- Firma -->
+  <p 
+    class="mt-10 text-sm md:text-lg text-pink-300 italic opacity-0 translate-x-20 transition-all duration-1000 ease-out delay-600 scroll-fade-in"
+  >
+    — Escrito por Yei
+  </p>
+</section>
+
+<style>
+  /* Animación de aparición desde la derecha */
+  .scroll-fade-in.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  // Detectar scroll y aplicar animación
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+</script>
