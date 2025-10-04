@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fontsource-variable/mulish": "^5.2.6",
+    "@supabase/supabase-js": "^2.58.0",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.12.8",
     "tailwindcss": "^4.1.11"
