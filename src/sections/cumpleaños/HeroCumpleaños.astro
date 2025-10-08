@@ -1,0 +1,50 @@
+<section class="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-16 relative overflow-hidden bg-transparent">
+  <!-- Corazones flotantes -->
+  <div class="absolute top-10 left-10 text-red-400 text-3xl animate-float-slow">❤️</div>
+  <div class="absolute top-20 right-12 text-red-400 text-4xl animate-float-medium">❤️</div>
+  <div class="absolute bottom-20 left-16 text-red-400 text-3xl animate-float-fast">❤️</div>
+  <div class="absolute bottom-10 right-14 text-red-400 text-4xl animate-float-slow delay-500">❤️</div>
+
+  <!-- Texto principal -->
+  <h1 class="text-4xl md:text-7xl font-extrabold italic text-pink-200 drop-shadow-lg leading-snug uppercase tracking-wide animate-fade-in">
+    Feliz <br />
+    Cumpleaños <br />
+    Mi Amor
+  </h1>
+
+  <!-- Subtítulo -->
+  <p class="mt-6 text-base md:text-xl text-pink-100 italic opacity-80 animate-fade-in delay-700">
+    Te amooooooooooooooooooo mi amorrr
+  </p>
+</section>
+
+<style>
+  /* Animaciones suaves */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); opacity: 0.9; }
+    50% { transform: translateY(-12px); opacity: 1; }
+  }
+  .animate-float-slow {
+    animation: float 5s ease-in-out infinite;
+  }
+  .animate-float-medium {
+    animation: float 4s ease-in-out infinite;
+  }
+  .animate-float-fast {
+    animation: float 3s ease-in-out infinite;
+  }
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 1.5s ease-out forwards;
+  }
+  .delay-700 {
+    animation-delay: 0.7s;
+  }
+</style>

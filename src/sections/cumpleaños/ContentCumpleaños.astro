@@ -1,0 +1,62 @@
+---
+---
+
+<section class="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-16 overflow-hidden">
+  <!-- Título -->
+  <h2 
+    class="text-3xl md:text-5xl font-bold italic text-pink-200 drop-shadow-lg mb-6 opacity-0 transition-all duration-1000 ease-out scroll-fade-in"
+  >
+    Feliz cumpleaños, mi reina 💕
+  </h2>
+
+  <!-- Texto -->
+  <p 
+    class="text-base md:text-xl text-pink-100 max-w-3xl leading-relaxed opacity-0 transition-all duration-1000 ease-out delay-300 scroll-fade-in"
+  >
+    Mi amor, quiero desearte hoy, mañana y siempre los mejores deseos para tu vida. De todo corazón espero que cumplas muchísimos años más. Aunque este año no puedo estar contigo celebrando como me gustaría, sé que pronto pasaremos muchos cumpleaños juntos y podremos festejar junticos, para tratarte como la reina que eres.
+    <br /><br />
+    Deseo que pases un día hermoso y que disfrutes muchísimo de todo lo que la vida tiene preparado para ti. Estoy seguro de que lograrás todas las metas que te propongas, porque nada te queda grande. Eres una mujer increíblemente dedicada, y se nota el empeño, las ganas y el amor que pones en todo lo que haces. Eso, mi vida, es lo más valioso.
+    <br /><br />
+    Aprovecho para recordarte que quiero ser tu compañero de toda la vida, estar presente en tus decisiones, aconsejarte, animarte o simplemente escucharte.
+    <br /><br />
+    Tu novio se imagina este día contigo: te levantas, yo te preparo tu desayuno favorito y te entrego un ramo de flores, te tomo fotitos, te lleno de besitos, abrazos y mimos. Te vacilo diciéndote que ya no tienes 16, que ahora son 22 😜. Pasamos el día recordando aventuras, viendo fotos, riéndonos de todo. Luego nos arreglamos juntos para ir a cenar a tu restaurante favorito, disfrutamos de tu cena preferida, y más tarde te llevo a casa para darte un regalo muy especial.
+    <br /><br />
+    Mi amor, eres la novia más preciosa del mundo. Todos los días te lo voy a repetir, porque nunca me cansaré de decirlo: eres lo mejor que me ha pasado. Nunca voy a dejar que te alejes de mi vida, porque quiero celebrar contigo todos los cumpleaños que vengan, y cada año sentir la misma felicidad de verte crecer, soñar y brillar.
+    <br /><br />
+    <span class="font-bold text-pink-200">Te amo con toda mi alma, mi vida. 💕</span>
+    <br /><br />
+    <span class="font-bold text-pink-200">Feliz cumpleaños, mi cielo hermoso 💕💕💕</span>
+  </p>
+
+  <!-- Firma -->
+  <p 
+    class="mt-10 text-sm md:text-lg text-pink-300 italic opacity-0 translate-x-20 transition-all duration-1000 ease-out delay-600 scroll-fade-in"
+  >
+    — Escrito por Yei
+  </p>
+</section>
+
+<style>
+  /* Animación de aparición desde la derecha */
+  .scroll-fade-in {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  .scroll-fade-in.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  // Detectar scroll y aplicar animación
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+</script>

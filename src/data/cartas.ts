@@ -56,12 +56,25 @@ export const cartas: Carta[] = [
     title: "Mi Niña Hermosa",
     image: "/bgnb.webp",
     slug: "mi-niña-hermosa",
-    from: "Tu hombre",
-    to: "Mi novia :3 ",
+    from: "Tu Novio",
+    to: "Mi pareja hermosa :) ",
     text: "Mi 29.5 eres tan especial y tan linda que no hay palabras para describir lo mucho que te quiero :3 ",
     components: [
       'HeroNiñaHermosa',
       'ContentNiñaHermosa',
     ]
-  }
+  },
+  {
+    title: "Feliz Cumpleaños Mi Amor",
+    image: "/cumple.webp",
+    slug: "cumpleaños",
+    from: "Tu Yei",
+    to: "Mi niña linda :3 ",
+    text: "Feliz día amor, ya tienes 17 TE AMO MUCHO :3",
+    components: [
+      'HeroCumpleaños',
+      'ContentCumpleaños',
+    ]
+  },
+  
 ];
