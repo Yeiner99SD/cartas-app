@@ -58,12 +58,9 @@ const { data: photos } = await supabase
   </div>
 </section>
 
-<script type="module">
+<script type="module" define:vars={{supabaseUrl: import.meta.env.PUBLIC_SUPABASE_URL, supabaseKey: import.meta.env.PUBLIC_SUPABASE_ANON_KEY}}>
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  // Reemplaza estos valores con los tuyos
-  const supabaseUrl = 'TU_SUPABASE_URL';
-  const supabaseKey = 'TU_SUPABASE_ANON_KEY';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const form = document.getElementById('photo-form');
