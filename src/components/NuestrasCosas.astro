@@ -2,10 +2,21 @@
 import { supabase } from '../lib/supabase.client';
 
 // Obtener todas las fotos al cargar la página
-const { data: photos } = await supabase
+const { data: photos, error: fetchError } = await supabase
   .from('photos')
   .select('*')
   .order('created_at', { ascending: false });
+
+if (fetchError) {
+  console.error('Error al cargar fotos:', fetchError);
+}
+
+const photosWithPublicUrls = photos?.map(photo => ({
+  ...photo,
+  url: supabase.storage.from('fotos').getPublicUrl(photo.url).data.publicUrl
+}));
+
+console.log('📸 Fotos cargadas:', photosWithPublicUrls);
 ---
 
 <section class="min-h-screen p-8">
@@ -39,13 +50,14 @@ const { data: photos } = await supabase
 
     <!-- Grid de fotos -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="photos-grid">
-      {photos?.map((photo) => (
+      {photosWithPublicUrls?.map((photo) => (
         <div class="relative aspect-square bg-white/10 rounded-lg overflow-hidden group">
           <img 
             src={photo.url} 
             alt="Nuestra foto" 
             class="w-full h-full object-cover"
             loading="lazy"
+            onerror="this.style.display='none'; console.error('Error cargando imagen:', this.src);"
           />
           <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity">
             <p class="absolute bottom-4 left-4 text-white text-sm">
@@ -58,18 +70,13 @@ const { data: photos } = await supabase
   </div>
 </section>
 
-<script type="module" define:vars={{supabaseUrl: import.meta.env.PUBLIC_SUPABASE_URL, supabaseKey: import.meta.env.PUBLIC_SUPABASE_ANON_KEY}}>
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
-  const form = document.getElementById('photo-form');
-  const fileInput = document.getElementById('file-input');
-  const submitButton = document.getElementById('submit-button');
+<script>
+  const form = document.getElementById('photo-form') as HTMLFormElement;
+  const fileInput = document.getElementById('file-input') as HTMLInputElement;
+  const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
   const photosGrid = document.getElementById('photos-grid');
 
   if (form && fileInput && submitButton && photosGrid) {
-    // Habilitar/deshabilitar botón según selección de archivo
     fileInput.addEventListener('change', () => {
       submitButton.disabled = !fileInput.files?.length;
     });
@@ -84,33 +91,60 @@ const { data: photos } = await supabase
         submitButton.disabled = true;
         submitButton.textContent = 'Subiendo...';
 
+        const { createClient } = await import('@supabase/supabase-js');
+        const supabase = createClient(
+          import.meta.env.PUBLIC_SUPABASE_URL,
+          import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+        );
+
         // 1. Subir el archivo a Supabase Storage
         const fileName = `${Date.now()}-${file.name}`;
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError, data: uploadData } = await supabase.storage
           .from('fotos')
-          .upload(fileName, file);
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: false
+          });
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {
+          console.error('Error al subir:', uploadError);
+          throw new Error('Error al subir la imagen: ' + uploadError.message);
+        }
 
         // 2. Obtener la URL pública
-        const { data } = supabase.storage
+        const { data: urlData } = supabase.storage
           .from('fotos')
           .getPublicUrl(fileName);
-        const publicUrl = data.publicUrl;
-
+        
+        if (!urlData) throw new Error('No se pudo obtener la URL pública');
+        
+        const now = new Date().toISOString();
+        
         // 3. Guardar la información en la base de datos
         const { error: dbError } = await supabase
           .from('photos')
-          .insert([{ url: publicUrl }]);
+          .insert([{ 
+            url: fileName,
+            created_at: now 
+          }])
+          .select()
+          .single();
 
-        if (dbError) throw dbError;
+        if (dbError) {
+          console.error('Error al guardar en DB:', dbError);
+          // Si falla la inserción en la base de datos, eliminamos el archivo subido
+          await supabase.storage
+            .from('fotos')
+            .remove([fileName]);
+          throw new Error('Error al guardar la información: ' + dbError.message);
+        }
 
         // 4. Agregar la nueva foto al grid
         const photoDiv = document.createElement('div');
         photoDiv.className = 'relative aspect-square bg-white/10 rounded-lg overflow-hidden group';
         photoDiv.innerHTML = `
           <img 
-            src="${publicUrl}" 
+            src="${urlData.publicUrl}" 
             alt="Nuestra foto" 
             class="w-full h-full object-cover"
             loading="lazy"
@@ -122,10 +156,7 @@ const { data: photos } = await supabase
           </div>
         `;
 
-        // Insertar al principio del grid
         photosGrid.insertBefore(photoDiv, photosGrid.firstChild);
-
-        // Resetear el formulario
         form.reset();
         submitButton.textContent = 'Subir Foto';
 
@@ -134,7 +165,7 @@ const { data: photos } = await supabase
         alert('Error al subir la foto. Por favor, intenta de nuevo.');
         submitButton.textContent = 'Subir Foto';
       } finally {
-        submitButton.disabled = true;
+        submitButton.disabled = false;
         fileInput.value = '';
       }
     });
