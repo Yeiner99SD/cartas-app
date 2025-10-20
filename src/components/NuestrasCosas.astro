@@ -11,10 +11,8 @@ if (fetchError) {
   console.error('Error al cargar fotos:', fetchError);
 }
 
-const photosWithPublicUrls = photos?.map(photo => ({
-  ...photo,
-  url: supabase.storage.from('fotos').getPublicUrl(photo.url).data.publicUrl
-}));
+// Ya no necesitamos transformar las URLs porque ahora guardamos la URL completa
+const photosWithPublicUrls = photos;
 
 console.log('📸 Fotos cargadas:', photosWithPublicUrls);
 ---
@@ -36,7 +34,6 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
             <input 
               type="file"
               accept="image/jpeg, image/png, image/webp, image/heic"
-              capture="environment"
               class="hidden"
               id="file-input"
             />
@@ -152,7 +149,7 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
           throw new Error('Error al subir la imagen: ' + uploadError.message);
         }
 
-        // 2. Obtener la URL pública
+        // 2. Obtener la URL pública completa
         const { data: urlData } = supabase.storage
           .from('fotos')
           .getPublicUrl(fileName);
@@ -161,11 +158,11 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
         
         const now = new Date().toISOString();
         
-        // 3. Guardar la información en la base de datos
+        // 3. Guardar la información en la base de datos con la URL completa
         const { error: dbError } = await supabase
           .from('photos')
           .insert([{ 
-            url: fileName,
+            url: urlData.publicUrl, // Guardamos la URL completa en lugar del nombre del archivo
             created_at: now 
           }])
           .select()
