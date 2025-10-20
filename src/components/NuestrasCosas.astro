@@ -11,8 +11,23 @@ if (fetchError) {
   console.error('Error al cargar fotos:', fetchError);
 }
 
-// Ya no necesitamos transformar las URLs porque ahora guardamos la URL completa
-const photosWithPublicUrls = photos;
+// Verificar y transformar las URLs si es necesario
+const photosWithPublicUrls = photos?.map(photo => {
+  // Si la URL ya es completa, la usamos directamente
+  if (photo.url.startsWith('https://')) {
+    return photo;
+  }
+  
+  // Si no, obtenemos la URL pública
+  const { data } = supabase.storage
+    .from('fotos')
+    .getPublicUrl(photo.file_name || photo.url);
+    
+  return {
+    ...photo,
+    url: data.publicUrl
+  };
+});
 
 console.log('📸 Fotos cargadas:', photosWithPublicUrls);
 ---
@@ -137,17 +152,21 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
 
         // 1. Subir el archivo a Supabase Storage
         const fileName = `${Date.now()}-${file.name}`;
+        console.log('Subiendo archivo:', fileName);
+        
         const { error: uploadError, data: uploadData } = await supabase.storage
           .from('fotos')
           .upload(fileName, file, {
             cacheControl: '3600',
-            upsert: false
+            upsert: true // Cambiado a true para permitir sobreescritura si es necesario
           });
 
         if (uploadError) {
           console.error('Error al subir:', uploadError);
           throw new Error('Error al subir la imagen: ' + uploadError.message);
         }
+
+        console.log('Archivo subido exitosamente:', uploadData);
 
         // 2. Obtener la URL pública completa
         const { data: urlData } = supabase.storage
@@ -156,17 +175,29 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
         
         if (!urlData) throw new Error('No se pudo obtener la URL pública');
         
+        console.log('URL pública generada:', urlData.publicUrl);
+        
         const now = new Date().toISOString();
         
-        // 3. Guardar la información en la base de datos con la URL completa
-        const { error: dbError } = await supabase
+        // 3. Guardar la información en la base de datos con la URL completa y el nombre del archivo
+        const { error: dbError, data: insertedData } = await supabase
           .from('photos')
           .insert([{ 
-            url: urlData.publicUrl, // Guardamos la URL completa en lugar del nombre del archivo
+            url: urlData.publicUrl,
+            file_name: fileName, // Guardamos también el nombre del archivo
             created_at: now 
           }])
           .select()
           .single();
+
+        console.log('Datos insertados en la base de datos:', insertedData);
+
+        if (dbError) {
+          console.error('Error al guardar en la base de datos:', dbError);
+          // Si falla la inserción, intentamos eliminar el archivo
+          await supabase.storage.from('fotos').remove([fileName]);
+          throw dbError;
+        }
 
         if (dbError) {
           console.error('Error al guardar en DB:', dbError);
@@ -174,7 +205,7 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
           await supabase.storage
             .from('fotos')
             .remove([fileName]);
-          throw new Error('Error al guardar la información: ' + dbError.message);
+          throw new Error('Error al guardar la información: ' + (dbError as Error).message);
         }
 
         // 4. Agregar la nueva foto al grid
