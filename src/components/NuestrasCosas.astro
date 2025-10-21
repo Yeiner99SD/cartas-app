@@ -11,23 +11,10 @@ if (fetchError) {
   console.error('Error al cargar fotos:', fetchError);
 }
 
-// Verificar y transformar las URLs si es necesario
-const photosWithPublicUrls = photos?.map(photo => {
-  // Si la URL ya es completa, la usamos directamente
-  if (photo.url.startsWith('https://')) {
-    return photo;
-  }
-  
-  // Si no, obtenemos la URL pública
-  const { data } = supabase.storage
-    .from('fotos')
-    .getPublicUrl(photo.file_name || photo.url);
-    
-  return {
-    ...photo,
-    url: data.publicUrl
-  };
-});
+const photosWithPublicUrls = photos?.map(photo => ({
+  ...photo,
+  url: supabase.storage.from('fotos').getPublicUrl(photo.url).data.publicUrl
+}));
 
 console.log('📸 Fotos cargadas:', photosWithPublicUrls);
 ---
@@ -40,16 +27,12 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
     <div class="mb-12 bg-white/10 p-6 rounded-lg">
       <form id="photo-form" class="flex flex-col items-center gap-4">
         <label class="w-full max-w-md">
-          <div class="bg-purple-600 text-white px-6 py-4 rounded-lg text-center cursor-pointer hover:bg-purple-700 transition-colors flex items-center justify-center gap-2">
-            <span>Tomar o Seleccionar Foto</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
+          <div class="bg-purple-600 text-white px-6 py-4 rounded-lg text-center cursor-pointer hover:bg-purple-700 transition-colors">
+            Seleccionar Foto
             <input 
-              type="file"
-              accept="image/jpeg, image/png, image/webp, image/heic"
-              class="hidden"
+              type="file" 
+              accept="image/*" 
+              class="hidden" 
               id="file-input"
             />
           </div>
@@ -94,39 +77,11 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
   const photosGrid = document.getElementById('photos-grid');
 
   if (form && fileInput && submitButton && photosGrid) {
-      // Función para validar el archivo
-      const validateFile = (file:any) => {
-        // Validar tamaño (máximo 5MB)
-        const maxSize = 5 * 1024 * 1024; // 5MB en bytes
-        if (file.size > maxSize) {
-          alert('La imagen es demasiado grande. El tamaño máximo es 5MB.');
-          return false;
-        }
+    fileInput.addEventListener('change', () => {
+      submitButton.disabled = !fileInput.files?.length;
+    });
 
-        // Validar tipo de archivo
-        const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/heic'];
-        if (!validTypes.includes(file.type)) {
-          alert('Por favor selecciona una imagen en formato JPG, PNG, WEBP o HEIC.');
-          return false;
-        }
-
-        return true;
-      };
-
-      fileInput.addEventListener('change', () => {
-        const file = fileInput.files?.[0];
-        if (file) {
-          if (validateFile(file)) {
-            submitButton.disabled = false;
-            submitButton.textContent = 'Subir Foto';
-          } else {
-            fileInput.value = '';
-            submitButton.disabled = true;
-          }
-        } else {
-          submitButton.disabled = true;
-        }
-      });    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const file = fileInput.files?.[0];
@@ -134,15 +89,7 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
 
       try {
         submitButton.disabled = true;
-        submitButton.innerHTML = `
-          <span class="flex items-center gap-2">
-            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span>Subiendo...</span>
-          </span>
-        `;
+        submitButton.textContent = 'Subiendo...';
 
         const { createClient } = await import('@supabase/supabase-js');
         const supabase = createClient(
@@ -152,13 +99,11 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
 
         // 1. Subir el archivo a Supabase Storage
         const fileName = `${Date.now()}-${file.name}`;
-        console.log('Subiendo archivo:', fileName);
-        
         const { error: uploadError, data: uploadData } = await supabase.storage
           .from('fotos')
           .upload(fileName, file, {
             cacheControl: '3600',
-            upsert: true // Cambiado a true para permitir sobreescritura si es necesario
+            upsert: false
           });
 
         if (uploadError) {
@@ -166,38 +111,24 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
           throw new Error('Error al subir la imagen: ' + uploadError.message);
         }
 
-        console.log('Archivo subido exitosamente:', uploadData);
-
-        // 2. Obtener la URL pública completa
+        // 2. Obtener la URL pública
         const { data: urlData } = supabase.storage
           .from('fotos')
           .getPublicUrl(fileName);
         
         if (!urlData) throw new Error('No se pudo obtener la URL pública');
         
-        console.log('URL pública generada:', urlData.publicUrl);
-        
         const now = new Date().toISOString();
         
-        // 3. Guardar la información en la base de datos con la URL completa y el nombre del archivo
-        const { error: dbError, data: insertedData } = await supabase
+        // 3. Guardar la información en la base de datos
+        const { error: dbError } = await supabase
           .from('photos')
           .insert([{ 
-            url: urlData.publicUrl,
-            file_name: fileName, // Guardamos también el nombre del archivo
+            url: fileName,
             created_at: now 
           }])
           .select()
           .single();
-
-        console.log('Datos insertados en la base de datos:', insertedData);
-
-        if (dbError) {
-          console.error('Error al guardar en la base de datos:', dbError);
-          // Si falla la inserción, intentamos eliminar el archivo
-          await supabase.storage.from('fotos').remove([fileName]);
-          throw dbError;
-        }
 
         if (dbError) {
           console.error('Error al guardar en DB:', dbError);
@@ -205,7 +136,7 @@ console.log('📸 Fotos cargadas:', photosWithPublicUrls);
           await supabase.storage
             .from('fotos')
             .remove([fileName]);
-          throw new Error('Error al guardar la información: ' + (dbError as Error).message);
+          throw new Error('Error al guardar la información: ' + dbError.message);
         }
 
         // 4. Agregar la nueva foto al grid
