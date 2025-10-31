@@ -76,5 +76,22 @@ export const cartas: Carta[] = [
       'ContentCumpleaños',
     ]
   },
+  {
+    title: "2 Meses Contigo = Muchisima Felicidad",
+    image: "/banner2meses.webp",
+    slug: "two-months",
+    from: "Tu Yei",
+    to: "Mi angel hermoso :3 ",
+    text: "Felices 2 meses mi amor, gracias por hacerme tan feliz",
+    components: [
+      'Title',
+      'OrquiPerfect',
+      'Phalaenopsis',
+      'Cattleya',
+      'Vanda',
+      'Oncidium',
+      'Paphiopedilum',
+    ]
+  },
   
 ];
