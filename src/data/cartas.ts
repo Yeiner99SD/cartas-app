@@ -89,7 +89,7 @@ export const cartas: Carta[] = [
       'Phalaenopsis',
       'Cattleya',
       'Vanda',
-      'Oncidium',
+      'Oncidum',
       'Paphiopedilum',
     ]
   },
