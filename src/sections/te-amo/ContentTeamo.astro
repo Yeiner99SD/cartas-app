@@ -1,0 +1,71 @@
+<section class="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-16 overflow-hidden">
+  <!-- Título -->
+  <h2 
+    class="text-3xl md:text-5xl font-bold italic text-pink-200 drop-shadow-lg mb-6 opacity-0 transition-all duration-1000 ease-out scroll-fade-in"
+  >
+    Te amo es más que solo decírtelo <br /> 
+    <span class="text-lg md:text-2xl font-normal">3 nov 2025</span>
+  </h2>
+
+  <!-- Texto principal -->
+  <p 
+    class="text-base md:text-xl text-pink-100 max-w-3xl leading-relaxed opacity-0 transition-all duration-1000 ease-out delay-300 scroll-fade-in"
+  >
+    Soy completamente sincero contigo: un <span class="font-semibold text-pink-200">te amo</span> puede sonar simple, 
+    pero cuando se trata de nosotros, no es solo una palabra, es todo lo que irradia su significado. 
+    Es un sentimiento tan fuerte que lo comparo con la fuerza de atracción de un agujero negro: 
+    cada vez que te digo <span class="font-semibold text-pink-200">te amo</span>, es así de inmenso. <br /><br />
+
+    Un <span class="italic text-pink-200">te amo</span> es pensar en un futuro cercano y, al mismo tiempo, en uno lejano, 
+    lleno de todas las cosas que vamos a vivir. Suena como los mil besos que quiero darte cada día. 
+    Es imaginar lo maravillosa que eres en todo lo que haces. <br /><br />
+
+    Un <span class="italic text-pink-200">te amo mucho</span> suena como tus soniditos al dormir. 
+    Es la sensación de terminar algo que anhelaba concluir de buena manera. 
+    Es verte y no tener que decir nada, solo sonreír al mirar los mejores ojos que existen. 
+    Es comprender algo complejo y enamorarme aún más de ello. 
+    <br /><br />
+
+    <span class="font-semibold text-pink-200">Te amo</span> es tan grande como este universo. 
+    Tú eres mi reina, y quiero ser quien se case contigo para estar contigo por siempre. 
+    Te amo en esta vida y en todas las que sigan. <br /><br />
+
+    Te amo por entenderme, por ayudarme, por estar conmigo incluso cuando no estás físicamente. 
+    Te amo por confiar en mí, por hacer lo complejo fácil, por tu carita, por todo tú. <br /><br />
+
+    Para mí, <span class="italic text-pink-200">te amo</span> es el conector principal que une nuestros corazones 
+    sin importar la distancia o la situación. <br /><br />
+
+    <span class="font-bold text-pink-200 text-lg">Te amo definitivamente, mi amor. ♡</span>
+  </p>
+
+  <!-- Firma -->
+  <p 
+    class="mt-10 text-sm md:text-lg text-pink-300 italic opacity-0 translate-x-20 transition-all duration-1000 ease-out delay-600 scroll-fade-in"
+  >
+    — Escrito por Yei
+  </p>
+
+  <!-- Corazones decorativos -->
+  <img src="/corazones.webp" alt="corazón" class="absolute top-10 left-10 w-10 md:w-14 animate-bounce opacity-80">
+  <img src="/corazones.webp" alt="corazón" class="absolute bottom-10 right-10 w-10 md:w-14 animate-bounce opacity-80 rotate-12">
+</section>
+
+<style>
+  .scroll-fade-in.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+</script>

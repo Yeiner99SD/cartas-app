@@ -93,5 +93,17 @@ export const cartas: Carta[] = [
       'Paphiopedilum',
     ]
   },
+  {
+    title: "Te amo = Union de felicidad",
+    image: "/teamobanner.webp",
+    slug: "te-amo",
+    from: "Tu novio",
+    to: "Mi novia que más amo :3 ",
+    text: "Pienso mucho en como te amo más cada día",
+    components: [
+      'TeamoTitle',
+      'ContentTeamo',
+    ]
+  },
   
 ];
