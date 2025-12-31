@@ -105,5 +105,22 @@ export const cartas: Carta[] = [
       'ContentTeamo',
     ]
   },
-  
+  {
+    title: "Gracias 2025 - RECAP",
+    image: "/2025/2025DANIA.webp",
+    slug: "2025",
+    from: "Tu Yei de tu vida",
+    to: "La chica de mis sueños <3 ",
+    text: "Le agradezco a todo por darme la oportunidad de tenerte a mi lado",
+    components: [
+      '2025Title',
+      '2025FT',
+      '2025FC',
+      '2025FN',
+      '2025Trenzas',
+      '2025TC',
+      '2025Cartita',
+      'Content2025',
+    ]
+  }
 ];

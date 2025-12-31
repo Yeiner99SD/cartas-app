@@ -1,0 +1,67 @@
+<section class="relative flex items-center justify-center min-h-screen px-4 text-center overflow-hidden">
+  <!-- Corazones imagen (esquinas) -->
+  <img
+    src="/corazones.webp"
+    alt="corazón"
+    class="absolute top-6 left-6 w-12 sm:w-16 opacity-90"
+  />
+  <img
+    src="/corazones.webp"
+    alt="corazón"
+    class="absolute top-6 right-6 w-12 sm:w-16 opacity-90"
+  />
+  <img
+    src="/corazones.webp"
+    alt="corazón"
+    class="absolute bottom-6 left-6 w-12 sm:w-16 opacity-90"
+  />
+  <img
+    src="/corazones.webp"
+    alt="corazón"
+    class="absolute bottom-6 right-6 w-12 sm:w-16 opacity-90"
+  />
+
+  <!-- Texto -->
+  <h1
+    class="font-bold italic text-pink-100
+           text-2xl sm:text-3xl md:text-4xl lg:text-5xl
+           leading-snug max-w-4xl"
+  >
+    2025 GRACIAS POR:
+    <br />
+    MI NOVIA HERMOSA,
+    <br />
+
+    <!-- Nombre animado -->
+    <span
+      class="inline-block mt-4
+             text-pink-300
+             animate-love"
+    >
+      💕 DANIA ALARCON :3 💕
+    </span>
+  </h1>
+</section>
+
+<style>
+  @keyframes love {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    40% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    60% {
+      transform: scale(0.98);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .animate-love {
+    animation: love 1.8s ease-out forwards;
+  }
+</style>

@@ -35,8 +35,20 @@ export default function ImageModal({
     setScale(s => s === 1 ? 1.5 : 1)
   }, [])
 
-  const formattedDate = created_at 
-    ? new Date(new Date(created_at).getTime() - 5 * 60 * 60 * 1000).toLocaleString('es-CO', {
+  function parseAsUTC(s?: string) {
+    if (!s) return null
+    let t = s.trim()
+    if (!t.includes('T') && t.includes(' ')) t = t.replace(' ', 'T')
+    // If string already contains timezone info (Z or ±HH:MM), leave it.
+    if (!(/[Zz]|[+-]\d{2}:?\d{2}$/.test(t))) t = t + 'Z'
+    const d = new Date(t)
+    return isNaN(d.getTime()) ? null : d
+  }
+
+  const parsed = parseAsUTC(created_at)
+
+  const bogotaDate = parsed
+    ? parsed.toLocaleString('es-CO', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -44,6 +56,18 @@ export default function ImageModal({
         minute: '2-digit',
         hour12: true,
         timeZone: 'America/Bogota'
+      }).replace(/,/, ' -')
+    : null
+
+  const madridDate = parsed
+    ? parsed.toLocaleString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'Europe/Madrid'
       }).replace(/,/, ' -')
     : null
     
@@ -68,9 +92,10 @@ export default function ImageModal({
       >
         {/* Controles superiores */}
         <div className="w-full flex justify-between items-center text-white px-4">
-          <span className="text-sm md:text-base">
-            {formattedDate}
-          </span>
+          <div className="text-sm md:text-base flex flex-col items-start">
+            <span>Bogotá: {bogotaDate}</span>
+            <span>Madrid: {madridDate}</span>
+          </div>
           <button 
             onClick={onClose}
             className="p-2 text-2xl hover:text-gray-300 transition-colors"

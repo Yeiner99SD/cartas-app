@@ -1,0 +1,108 @@
+---
+---
+
+<section class="w-full min-h-screen flex flex-col justify-center items-center text-center px-6 md:px-16 overflow-hidden">
+  <!-- Título -->
+  <h2 
+    class="text-3xl md:text-5xl font-bold italic text-pink-200 drop-shadow-lg mb-8 opacity-0 transition-all duration-1000 ease-out scroll-fade-in"
+  >
+    Gracias por este amor tan grande 💕
+  </h2>
+
+  <!-- Texto -->
+  <p 
+    class="text-base md:text-xl text-pink-100 max-w-3xl leading-relaxed opacity-0 transition-all duration-1000 ease-out delay-300 scroll-fade-in"
+  >
+    En verdad vivimos muchas cosas especiales, amor.  
+    Tuvimos buenos días, malos días, días aburridos, días alegres…  
+    Este año que pasó hubo de todo, pero lo que siempre estuvo ahí fue el
+    <span class="font-bold text-pink-200">AMOR tan grande</span>
+    que te tengo 💕  
+    Un “gracias” no es suficiente por todo, pero intentaré dar las gracias por esto:
+  </p>
+
+  <!-- Lista -->
+  <ul
+    class="mt-10 text-pink-100 max-w-2xl mx-auto
+           text-left italic space-y-2
+           opacity-0 transition-all duration-1000 ease-out delay-500 scroll-fade-in"
+  >
+    <li>💗 Por ser tú.</li>
+    <li>💗 Por tener gustos increíbles.</li>
+    <li>💗 Por gustarte Álvaro Díaz.</li>
+    <li>💗 Por llegar a mi MD con Pro.</li>
+    <li>💗 Por tener los ojos más bonitos.</li>
+    <li>💗 Por interesarnos mutuamente.</li>
+    <li>💗 Por contar conmigo en decisiones de tu vida.</li>
+    <li>💗 Por tener confianza en mí.</li>
+    <li>💗 Por mostrarme tus mascotas.</li>
+    <li>💗 Por crecer conmigo y enseñarme en tan poco tiempo lo que significa amar.</li>
+    <li>💗 Por interesarte en mis hobbies y mostrarme los tuyos.</li>
+    <li>💗 Por las noches de solo tú y yo mirándonos.</li>
+    <li>💗 Por pensarnos mientras lo hacíamos.</li>
+    <li>💗 Por contarme lo que te gusta de mí.</li>
+    <li>💗 Por recibir y gustarte todos mis cumplidos.</li>
+    <li>💗 Por siempre hablarme de cómo te sientes.</li>
+    <li>💗 Por ver películas y siempre tener esa cara bella ahí.</li>
+    <li>💗 Por tu regalo de cumpleaños.</li>
+    <li>💗 Por nuestras playlists.</li>
+    <li>💗 Por todas las llamadas y videollamadas juntos.</li>
+    <li>💗 Por decir que te gusta todo de ti.</li>
+    <li>💗 Por ser sincera conmigo y llorar conmigo.</li>
+    <li>💗 Por mostrar tu lado tierno con tu familia.</li>
+    <li>💗 Por dejarme ver tus sentimientos.</li>
+    <li>💗 Por confesarme todo.</li>
+    <li>💗 Por ser mi novia OF toda la vida.</li>
+    <li>💗 Por hacerme reír en los días difíciles.</li>
+    <li>💗 Por ser la que se va a casar conmigo.</li>
+    <li>💗 Por ser la gongolí de mi vida.</li>
+    <li>💗 Por ser la chica más especial de este universo.</li>
+  </ul>
+
+  <!-- Cierre -->
+  <p 
+    class="mt-12 text-base md:text-xl text-pink-100 max-w-3xl leading-relaxed opacity-0 transition-all duration-1000 ease-out delay-700 scroll-fade-in"
+  >
+    Me quedo corto con lo que realmente te quiero agradecer.  
+    Este año que viene te prometo que nos veremos, así sea difícil la situación,
+    y empezaremos algo nuevo.
+    <br /><br />
+    <span class="font-bold text-pink-200">
+      Te lo daré todo, prometido de mi corazón.
+    </span>
+    <br /><br />
+    <span class="font-bold text-pink-200">
+      Te amo mi vida, y mucho 💕💕
+    </span>
+  </p>
+
+  <!-- Firma -->
+  <p 
+    class="mt-10 text-sm md:text-lg text-pink-300 italic opacity-0 translate-x-20 transition-all duration-1000 ease-out delay-1000 scroll-fade-in"
+  >
+    — Escrito por Yei
+  </p>
+</section>
+
+<style>
+  .scroll-fade-in {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  .scroll-fade-in.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+</script>

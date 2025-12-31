@@ -1,0 +1,84 @@
+
+<section
+  class="relative flex flex-col items-center justify-center min-h-screen px-4 text-center overflow-hidden"
+>
+  <!-- Corazones -->
+  <img
+    src="/corazones.webp"
+    class="absolute left-6 top-1/2 -translate-y-1/2 w-12 sm:w-16"
+    alt="corazón"
+  />
+  <img
+    src="/corazones.webp"
+    class="absolute right-6 top-1/2 -translate-y-1/2 w-12 sm:w-16"
+    alt="corazón"
+  />
+
+  <!-- Texto -->
+  <h1
+    class="font-bold italic text-pink-100
+           text-2xl sm:text-3xl md:text-4xl lg:text-5xl
+           max-w-4xl leading-snug"
+  >
+    LA FECHA EN LA
+    <br />
+    QUE HABLAMOS
+    <br />
+    POR PRIMERA VEZ.
+  </h1>
+
+  <p class="mt-6 text-pink-200 text-lg sm:text-xl font-semibold">
+    14 DE ABRIL
+  </p>
+
+  <!-- Botón -->
+  <button
+    id="revealBtn"
+    class="mt-10 px-6 py-3
+           text-pink-100 italic font-semibold
+           border border-pink-300/40
+           rounded-xl
+           hover:bg-pink-300/10
+           transition-all duration-300"
+  >
+    Pulsa aquí para ver el recuerdo
+  </button>
+
+  <!-- Imagen oculta -->
+  <img
+    id="recuerdoImg"
+    src="/2025/14ABRIL.webp"
+    alt="Primer mensaje"
+    class="hidden mt-10 max-w-xs sm:max-w-sm md:max-w-md
+           rounded-2xl shadow-xl
+           animate-reveal"
+  />
+</section>
+
+<!-- JS simple -->
+<script>
+  const btn = document.getElementById('revealBtn')
+  const img = document.getElementById('recuerdoImg')
+
+  btn?.addEventListener('click', () => {
+    btn.classList.add('hidden')
+    img?.classList.remove('hidden')
+  })
+</script>
+
+<style>
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-reveal {
+    animation: reveal 0.8s ease-out forwards;
+  }
+</style>
