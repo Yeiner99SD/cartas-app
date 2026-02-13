@@ -1,0 +1,32 @@
+<section class="flex flex-col items-center justify-center text-center py-20 px-4">
+
+  <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-8">
+    Mi amor feliz San Valentín, aquí tienes algo especial que en persona te daré
+  </h1>
+
+  <button 
+    id="botonFlores"
+    class="bg-rose-100 text-white px-6 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+  >
+    Presiona aquí 
+  </button>
+
+  <!-- Imagen oculta -->
+  <img 
+    id="imagenFlores"
+    src="/floresvalentin.webp"
+    alt="Flores para ti"
+    class="mt-10 w-72 sm:w-96 rounded-2xl shadow-2xl opacity-0 scale-90 transition-all duration-700"
+  />
+
+</section>
+
+<script>
+  const boton = document.getElementById("botonFlores");
+  const imagen = document.getElementById("imagenFlores");
+
+  boton?.addEventListener("click", () => {
+    imagen?.classList.remove("opacity-0", "scale-90");
+    imagen?.classList.add("opacity-100", "scale-100");
+  });
+</script>

@@ -103,7 +103,17 @@ export default function Gallery() {
           Volver al inicio
         </button>
       </div>
-      <h1 className="text-4xl font-bold">Nuestras fotitos</h1>
+      <div className="flex flex-col items-center justify-center gap-2 mb-12 mt-12">
+    <div className="flex items-center gap-2">
+      <img src="/corazones.webp" alt="Corazón" className="w-8 h-8" />
+      <h1 className="text-[#4C0967] text-3xl font-medium text-center">
+        Nuestras
+        <br/>
+        Fotos :))
+      </h1>
+      <img src="/corazones.webp" alt="Corazón" className="w-8 h-8" />
+    </div>
+  </div>
       <UploadButton onUpload={handleNewPhoto} />
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
         {photos.map((photo, index) => (

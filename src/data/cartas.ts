@@ -122,5 +122,17 @@ export const cartas: Carta[] = [
       '2025Cartita',
       'Content2025',
     ]
+  },
+  {
+    title: "Tu mi san Valentin",
+    image: "/bgvalentin.webp",
+    slug: "san-valentin",
+    from: "Tu novio",
+    to: "La novia más linda del mundo <3 ",
+    text: "Mi 14 de febrero más especial",
+    components: [
+      'Flores',
+      'HeroValentin',
+    ]
   }
 ];

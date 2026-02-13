@@ -11,6 +11,7 @@
   "dependencies": {
     "@astrojs/react": "^4.4.0",
     "@fontsource-variable/mulish": "^5.2.6",
+    "@fontsource/kalam": "^5.2.8",
     "@supabase/supabase-js": "^2.58.0",
     "@tailwindcss/vite": "^4.1.11",
     "@types/react": "^19.2.2",

@@ -1,0 +1,169 @@
+
+ <section class="relative flex flex-col items-center justify-center text-center px-4 py-16 md:py-24 min-h-screen">
+
+  <!-- Título -->
+  <div class="max-w-2xl mx-auto">
+    <h1 class="mb-12 text-4xl sm:text-5xl md:text-6xl text-white font-bold leading-relaxed animate-fade-up  ">
+      Esas flores no vienen solas, te entrego una cartita mi amor, espero que te guste junto con el regalito :3
+    </h1>
+  </div>
+
+  <!-- Sobre -->
+  <div class="w-full max-w-[400px] flex justify-center">
+    <div class="envoltura-sobre relative rounded-xl shadow-2xl bg-[#ffe3ed] w-full">
+
+      <div class="sobre relative w-full h-[250px] sm:h-[300px] cursor-pointer">
+
+        <!-- Carta -->
+        <div class="carta absolute bottom-0 w-full h-full bg-white rounded-lg p-5 shadow transition-transform duration-500">
+  <div class="contenido h-full overflow-y-auto border-2 border-dotted border-[#003049] p-4 text-[13px] leading-[18px] text-[#003049] flex flex-col items-center justify-center text-center">
+    
+    <strong class="text-lg">Mi niña 💕</strong>
+    
+    <p class="mt-4">
+      Feliz y muy feliz San Valentín.  
+      Eres la chica más maravillosa que existe y eso nunca lo dejaré de decir.
+    </p>
+
+    <p class="mt-3">
+      Eres una pieza fundamental en mi vida y pienso cada día en formar mi vida contigo.  
+      Eres mi inspiración cada día.
+    </p>
+
+    <p class="mt-3">
+      Te amo en todos los idiomas y en todos los universos. 
+    </p>
+
+    <p class="mt-3">
+      Quiero estar contigo toda mi vida, quiero enfrentar los momentos difíciles contigo  
+      y no rendirme nunca.
+    </p>
+
+    <p class="mt-3">
+      Acepto cada uno de mis errores, y te prometo que nunca te dejaré esperando.  
+      Confía en mí, confía en el proceso, amor.
+    </p>
+
+    <p class="mt-4 font-semibold">
+      Feliz San Valentín mi 29,5 
+    </p>
+
+  </div>
+</div>
+
+
+      </div>
+
+      <!-- Corazón -->
+      <div class="corazon absolute z-50 cursor-pointer"></div>
+
+      <div class="solapa-derecha absolute inset-0"></div>
+      <div class="solapa-izquierda absolute inset-0"></div>
+
+    </div>
+  </div>
+
+
+
+  <!-- CSS que Tailwind no puede -->
+  <style>
+    .sobre::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 40;
+      border-top: 180px solid #ffccd5;
+      border-right: 200px solid transparent;
+      border-left: 200px solid transparent;
+      transform-origin: top;
+      transition: all 0.5s ease-in-out 0.7s;
+      border-radius: 10px;
+    }
+
+    .solapa-derecha {
+      background: #ffc1d1;
+      clip-path: polygon(100% 0, 0 100%, 100% 100%);
+      border-radius: 10px;
+    }
+
+    .solapa-izquierda {
+      background: #ffc1d1;
+      clip-path: polygon(0 0, 0 100%, 100% 100%);
+      border-radius: 10px;
+    }
+
+    .corazon {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  background: #ff477e;
+  transform: translate(-50%, -50%) rotate(315deg);
+  transition: transform 0.5s ease-in-out 1s;
+  z-index: 60;
+}
+
+
+
+  .corazon::before,
+.corazon::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: #ff477e;
+  border-radius: 50%;
+}
+
+.corazon::before {
+  top: -15px;
+  left: 0;
+}
+
+.corazon::after {
+  left: 15px;
+  top: 0;
+}
+
+    /* Estados */
+    .abierto .sobre::before {
+      transform: rotateX(180deg);
+      z-index: 0;
+    }
+
+    .abierto .corazon {
+      transform: translate(-50%, 0) rotate(90deg);
+    }
+
+    .carta.mostrar-carta {
+      transform: translateY(-290px);
+    }
+
+    .carta.abierta {
+      z-index: 9999;
+    }
+  </style>
+
+  <!-- JS -->
+  <script>
+    const envoltura = document.querySelector(".envoltura-sobre");
+    const carta = document.querySelector(".carta");
+
+    document.addEventListener("click", (e) => {
+      if ((e.target as Element).closest(".sobre") || (e.target as Element).closest(".corazon")) {
+        if (envoltura && carta) {
+          envoltura.classList.toggle("abierto");
+
+        if (!carta.classList.contains("abierta")) {
+          carta.classList.add("mostrar-carta");
+
+          setTimeout(() => {
+            carta.classList.remove("mostrar-carta");
+            carta.classList.add("abierta");
+          }, 500);
+        }
+      }
+    }});
+  </script>
+</section>
