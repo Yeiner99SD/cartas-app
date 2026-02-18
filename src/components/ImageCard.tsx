@@ -45,7 +45,7 @@ export default function ImageCard({ photo, onClick }: Props) {
     : null
 
   return (
-    <div 
+      <div 
         className="group relative overflow-hidden rounded-2xl shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer"
         onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -53,7 +53,7 @@ export default function ImageCard({ photo, onClick }: Props) {
       >
         <img src={photo.url} alt="foto" className="w-full h-48 object-cover" />
         
-        {/* Overlay con fecha y botón de favorito */}
+        {/* Overlay con fecha y descripción */}
         <div 
           className={`absolute inset-0 bg-black/50 flex flex-col justify-between p-3 text-white transition-opacity duration-300
             ${isHovered ? 'opacity-100' : 'opacity-0'}`}
@@ -62,7 +62,15 @@ export default function ImageCard({ photo, onClick }: Props) {
             <div>Bogotá: {bogotaDate}</div>
             <div>Madrid: {madridDate}</div>
           </div>
-          {/* Aquí estaba el botón de favoritos */}
+          
+          {/* Mostrar estado de descripción */}
+          <div className="text-xs bg-black/30 rounded p-2">
+            {photo.description ? (
+              <p className="line-clamp-2"><strong>Descripción:</strong> {photo.description}</p>
+            ) : (
+              <p className="italic text-gray-300">Sin descripción</p>
+            )}
+          </div>
         </div>
       </div>
   )

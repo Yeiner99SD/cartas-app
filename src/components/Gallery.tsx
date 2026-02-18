@@ -42,7 +42,13 @@ export default function Gallery() {
     setPhotos((prev) => [newPhoto, ...prev])
   }
 
-  // Se eliminó la función handleToggleFavorite
+  const handleDescriptionUpdate = (photoId: number, newDescription: string | null) => {
+    setPhotos((prev) =>
+      prev.map((p) =>
+        p.id === photoId ? { ...p, description: newDescription } : p
+      )
+    )
+  }
 
   const handleNavigate = (direction: 'prev' | 'next') => {
     if (currentPhotoIndex === null) return
@@ -130,6 +136,11 @@ export default function Gallery() {
         <ImageModal 
           url={photos[currentPhotoIndex].url}
           created_at={photos[currentPhotoIndex].created_at}
+          photoId={photos[currentPhotoIndex].id}
+          description={photos[currentPhotoIndex].description}
+          onDescriptionUpdate={(newDesc) => 
+            handleDescriptionUpdate(photos[currentPhotoIndex].id, newDesc)
+          }
           onClose={closePhotoModal}
           currentIndex={currentPhotoIndex}
           totalPhotos={photos.length}

@@ -5,37 +5,59 @@ import "../styles/global.css";
 <header class="fixed top-0 left-0 right-0 z-50">
   <nav class="flex justify-around items-center px-6 py-4 bg-transparent">
     <!-- Links Desktop -->
-    <div id="nav-links" class="hidden md:flex gap-6 text-white">
-      <a href="/home" class="hover:text-white/80 transition-colors">Mis cartas</a>
-      <a href="/nuestras-cositas" class="hover:text-white/80 transition-colors">Nuestras fotos</a>
+    <div id="nav-links" class="hidden md:flex gap-6">
+      <a 
+        href="/home" 
+        class="px-4 py-2 text-white font-semibold border border-white/30 rounded-lg hover:bg-white/10 hover:border-white/60 hover:scale-105 transition-all duration-300"
+      >
+        Mis cartas
+      </a>
+      <a 
+        href="/nuestras-cositas" 
+        class="px-4 py-2 text-white font-semibold border border-white/30 rounded-lg hover:bg-white/10 hover:border-white/60 hover:scale-105 transition-all duration-300"
+      >
+        Nuestras fotos
+      </a>
     </div>
 
     <!-- Botón logout (desktop) -->
     <button 
       id="logout-btn-desktop"
-      class="hidden md:block hover:cursor-pointer px-4 py-2 text-sm bg-white text-purple-700 hover:text-purple-400 font-semibold transition-colors"
+      class="hidden md:block hover:cursor-pointer px-4 py-2 text-sm bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 hover:scale-105 transition-all duration-300 shadow-md"
     >
       Cerrar sesión
     </button>
 
     <!-- Botón hamburguesa (solo mobile) -->
-    <button id="menu-toggle" class="md:hidden text-white text-2xl focus:outline-none">
+    <button id="menu-toggle" class="md:hidden text-white text-3xl focus:outline-none hover:scale-110 transition-transform">
       ☰
     </button>
   </nav>
 
   <!-- Menú Mobile -->
   <div id="mobile-menu" 
-    class="hidden flex flex-col justify-center items-center gap-6 text-white absolute top-0 left-0 w-full h-screen bg-black/70 backdrop-blur-md z-50">
+    class="hidden flex flex-col justify-center items-center gap-8 absolute top-0 left-0 w-full h-screen bg-gradient-to-b from-[#4C0967] to-[#2a0543] backdrop-blur-md z-50">
     
-    <button id="menu-close" class="absolute top-5 right-6 text-3xl text-white">✕</button>
+    <button id="menu-close" class="absolute top-6 right-6 text-4xl text-white hover:text-gray-300 transition-colors">✕</button>
 
-    <a href="/home" class="hover:text-white/80 transition-colors">Mis cartas</a>
-    <a href="/nuestras-cositas" class="hover:text-white/80 transition-colors">Nuestras fotos</a>
+    <div class="flex flex-col gap-6 w-3/4">
+      <a 
+        href="/home" 
+        class="px-6 py-4 text-center text-lg font-semibold text-white bg-white/10 rounded-xl hover:bg-white/20 hover:scale-105 transition-all duration-300 border border-white/20 hover:border-white/50"
+      >
+        Mis cartas
+      </a>
+      <a 
+        href="/nuestras-cositas" 
+        class="px-6 py-4 text-center text-lg font-semibold text-white bg-white/10 rounded-xl hover:bg-white/20 hover:scale-105 transition-all duration-300 border border-white/20 hover:border-white/50"
+      >
+        Nuestras fotos
+      </a>
+    </div>
     
     <button 
       id="logout-btn-mobile"
-      class="hover:cursor-pointer px-4 py-2 text-sm bg-white text-purple-700 hover:text-purple-400 font-semibold transition-colors"
+      class="px-6 py-3 text-sm font-semibold bg-red-600 text-white rounded-lg hover:bg-red-700 hover:scale-105 transition-all duration-300 shadow-lg"
     >
       Cerrar sesión
     </button>

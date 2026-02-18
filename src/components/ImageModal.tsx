@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { supabase } from '../lib/supabaseClient'
 
 type Props = {
   url: string
@@ -7,6 +8,9 @@ type Props = {
   totalPhotos: number
   onNavigate: (direction: 'prev' | 'next') => void
   created_at?: string
+  photoId?: number
+  description?: string | null
+  onDescriptionUpdate?: (newDescription: string | null) => void
 }
 
 export default function ImageModal({ 
@@ -15,9 +19,17 @@ export default function ImageModal({
   currentIndex,
   totalPhotos,
   onNavigate,
-  created_at
+  created_at,
+  photoId,
+  description,
+  onDescriptionUpdate
 }: Props) {
   const [scale, setScale] = useState(1)
+  const [isEditingDescription, setIsEditingDescription] = useState(false)
+  const [editedDescription, setEditedDescription] = useState(description || '')
+  const [isSavingDescription, setIsSavingDescription] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  
   
   // Cerrar con la tecla Escape y navegación con flechas
   useEffect(() => {
@@ -29,6 +41,44 @@ export default function ImageModal({
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [onClose, onNavigate])
+
+  const handleSaveDescription = async () => {
+    if (!photoId) {
+      setErrorMessage('Error: No se pudo identificar la foto')
+      return
+    }
+
+    try {
+      setIsSavingDescription(true)
+      setErrorMessage(null)
+
+      const descriptionValue = editedDescription.trim() || null
+
+      const { data, error } = await supabase
+        .from('photos')
+        .update({ description: descriptionValue })
+        .eq('id', photoId)
+        .select()
+
+      if (error) {
+        setErrorMessage(`Error al guardar: ${error.message}`)
+        return
+      }
+
+      onDescriptionUpdate?.(descriptionValue)
+      setIsEditingDescription(false)
+    } catch (err) {
+      setErrorMessage('Error al guardar la descripción')
+    } finally {
+      setIsSavingDescription(false)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setEditedDescription(description || '')
+    setIsEditingDescription(false)
+    setErrorMessage(null)
+  }
 
   // Toggle zoom con doble clic
   const handleDoubleClick = useCallback(() => {
@@ -117,30 +167,91 @@ export default function ImageModal({
         </div>
 
         {/* Controles inferiores */}
-        <div className="w-full flex items-center justify-between gap-4 px-4 text-white">
-          <button
-            onClick={handlePrev}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            disabled={currentIndex === 0}
-          >
-            <span className="text-2xl">←</span>
-            <span className="hidden md:inline">Anterior</span>
-          </button>
-
-          <div className="flex items-center gap-4">
-            <span className="text-sm md:text-base">
-              {currentIndex + 1} / {totalPhotos}
-            </span>
+        <div className="w-full flex flex-col gap-4 px-4 text-white">
+          {/* Sección de descripción */}
+          <div className="bg-black/30 rounded-lg p-4">
+            {!isEditingDescription ? (
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                  {description ? (
+                    <div>
+                      <p className="text-sm text-gray-300 mb-2">Descripción:</p>
+                      <p className="text-base">{description}</p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400 italic">Sin descripción</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => {
+                    setIsEditingDescription(true)
+                    setEditedDescription(description || '')
+                  }}
+                  className="whitespace-nowrap px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm transition-colors"
+                >
+                  {description ? 'Editar' : 'Agregar descripción'}
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <textarea
+                  value={editedDescription}
+                  onChange={(e) => setEditedDescription(e.target.value)}
+                  placeholder="Escribe una descripción para esta foto..."
+                  className="w-full p-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={3}
+                />
+                {errorMessage && (
+                  <div className="p-2 bg-red-600/30 border border-red-500 rounded text-red-200 text-sm">
+                    {errorMessage}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleCancelEdit}
+                    disabled={isSavingDescription}
+                    className="flex-1 px-3 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm transition-colors disabled:opacity-50"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleSaveDescription}
+                    disabled={isSavingDescription}
+                    className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm transition-colors disabled:opacity-50"
+                  >
+                    {isSavingDescription ? 'Guardando...' : 'Guardar'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
-          <button
-            onClick={handleNext}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            disabled={currentIndex === totalPhotos - 1}
-          >
-            <span className="hidden md:inline">Siguiente</span>
-            <span className="text-2xl">→</span>
-          </button>
+          {/* Navegación */}
+          <div className="flex items-center justify-between">
+            <button
+              onClick={handlePrev}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              disabled={currentIndex === 0}
+            >
+              <span className="text-2xl">←</span>
+              <span className="hidden md:inline">Anterior</span>
+            </button>
+
+            <div className="flex items-center gap-4">
+              <span className="text-sm md:text-base">
+                {currentIndex + 1} / {totalPhotos}
+              </span>
+            </div>
+
+            <button
+              onClick={handleNext}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              disabled={currentIndex === totalPhotos - 1}
+            >
+              <span className="hidden md:inline">Siguiente</span>
+              <span className="text-2xl">→</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

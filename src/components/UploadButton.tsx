@@ -5,49 +5,91 @@ type Props = {
   onUpload?: (photo: any) => void
 }
 
+type FileWithDescription = {
+  file: File
+  description: string
+  preview: string
+}
+
 export default function UploadButton({ onUpload }: Props) {
   const [uploading, setUploading] = useState(false)
+  const [filesWithDescriptions, setFilesWithDescriptions] = useState<FileWithDescription[]>([])
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false)
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+    
+    const filesArray = Array.from(files)
+    const newFiles: FileWithDescription[] = []
+
+    for (const file of filesArray) {
+      const preview = URL.createObjectURL(file)
+      newFiles.push({
+        file,
+        description: '',
+        preview
+      })
+    }
+
+    setFilesWithDescriptions(newFiles)
+    setShowDescriptionModal(true)
+  }
+
+  const handleDescriptionChange = (index: number, description: string) => {
+    setFilesWithDescriptions((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, description } : item))
+    )
+  }
+
+  const handleUploadAll = async () => {
+    if (filesWithDescriptions.length === 0) return
 
     try {
       setUploading(true)
-      const fileName = file.name.replace(/\s/g, '_') // quitar espacios
-      const filePath = `${crypto.randomUUID()}-${fileName}`
 
-      // Subir imagen al bucket
-      const { error: uploadError } = await supabase.storage
-        .from('galeria')
-        .upload(filePath, file, { cacheControl: '3600', upsert: false })
+      for (const item of filesWithDescriptions) {
+        const fileName = item.file.name.replace(/\s/g, '_')
+        const filePath = `${crypto.randomUUID()}-${fileName}`
 
-      if (uploadError) {
-        console.error('Error al subir imagen:', uploadError.message)
-        return
+        // Subir imagen al bucket
+        const { error: uploadError } = await supabase.storage
+          .from('galeria')
+          .upload(filePath, item.file, { cacheControl: '3600', upsert: false })
+
+        if (uploadError) {
+          console.error('Error al subir imagen:', uploadError.message)
+          continue
+        }
+
+        // Obtener URL pública
+        const { data } = supabase.storage.from('galeria').getPublicUrl(filePath)
+        const imageUrl = data.publicUrl
+
+        // Insertar registro en tabla con descripción
+        const insertPayload: any = { url: imageUrl }
+        if (item.description.trim()) {
+          insertPayload.description = item.description.trim()
+        }
+
+        const { data: insertedData, error: insertError } = await supabase
+          .from('photos')
+          .insert([insertPayload])
+          .select()
+          .single()
+
+        if (insertError) {
+          console.error('Error al insertar en tabla:', insertError.message)
+          continue
+        }
+
+        // Notificar al padre (Gallery) para cada foto subida
+        if (insertedData) onUpload?.(insertedData)
       }
 
-      // Obtener URL pública
-      const { data } = supabase.storage.from('galeria').getPublicUrl(filePath)
-      const imageUrl = data.publicUrl
-
-      // Insertar registro en tabla y obtener el registro insertado
-      const { data: insertedData, error: insertError } = await supabase
-        .from('photos')
-        .insert([{ url: imageUrl }])
-        .select()
-        .single()
-
-      if (insertError) {
-        console.error('Error al insertar en tabla:', insertError.message)
-        return
-      }
-
-      // Notificar al padre (Gallery) para que actualice la UI inmediatamente
-      if (insertedData) onUpload?.(insertedData)
-
-      // limpiar input para permitir subir el mismo archivo de nuevo si se desea
-      ;(e.target as HTMLInputElement).value = ''
+      // Limpiar estado
+      setFilesWithDescriptions([])
+      setShowDescriptionModal(false)
     } catch (err) {
       console.error('Error general:', err)
     } finally {
@@ -55,11 +97,84 @@ export default function UploadButton({ onUpload }: Props) {
     }
   }
 
+  const handleCancel = () => {
+    // Limpiar URLs de preview
+    filesWithDescriptions.forEach(item => URL.revokeObjectURL(item.preview))
+    setFilesWithDescriptions([])
+    setShowDescriptionModal(false)
+  }
+
 
   return (
-    <label className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl cursor-pointer shadow-md">
-      {uploading ? 'Subiendo...' : 'Subir foto'}
-      <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
-    </label>
+    <>
+      <label className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl cursor-pointer shadow-md">
+        {uploading ? 'Subiendo...' : 'Subir fotos'}
+        <input 
+          type="file" 
+          accept="image/*" 
+          className="hidden" 
+          onChange={handleFileSelect}
+          disabled={uploading || showDescriptionModal}
+          multiple
+        />
+      </label>
+
+      {/* Modal para agregar descripción a múltiples fotos */}
+      {showDescriptionModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">
+              Agregar descripción a {filesWithDescriptions.length} foto{filesWithDescriptions.length !== 1 ? 's' : ''} (opcional)
+            </h2>
+            
+            <div className="space-y-4 mb-6">
+              {filesWithDescriptions.map((item, index) => (
+                <div key={index} className="border border-gray-300 rounded-lg p-4">
+                  <div className="flex gap-4 items-start">
+                    {/* Preview de imagen */}
+                    <img 
+                      src={item.preview} 
+                      alt={`Preview ${index + 1}`}
+                      className="w-24 h-24 object-cover rounded"
+                    />
+                    
+                    {/* Input de descripción */}
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Foto {index + 1}: {item.file.name}
+                      </label>
+                      <textarea
+                        value={item.description}
+                        onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                        placeholder="Descripción (opcional)..."
+                        className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        rows={2}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={handleCancel}
+                disabled={uploading}
+                className="flex-1 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 disabled:opacity-50 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleUploadAll}
+                disabled={uploading}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              >
+                {uploading ? 'Subiendo...' : `Subir ${filesWithDescriptions.length} foto${filesWithDescriptions.length !== 1 ? 's' : ''}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
