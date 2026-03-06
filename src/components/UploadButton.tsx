@@ -20,28 +20,53 @@ const isVideoFile = (file: File): boolean => {
     videoExtensions.some(ext => file.name.toLowerCase().endsWith(ext))
 }
 
+// Configuración de límites
+const MAX_FILE_SIZE_MB = 100 // 100 MB máximo
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
+const MAX_RETRIES = 3
+const UPLOAD_TIMEOUT_MS = 300000 // 5 minutos para videos grandes
+
 export default function UploadButton({ onUpload }: Props) {
   const [uploading, setUploading] = useState(false)
   const [filesWithDescriptions, setFilesWithDescriptions] = useState<FileWithDescription[]>([])
   const [showDescriptionModal, setShowDescriptionModal] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files || files.length === 0) return
     
+    setUploadError(null)
     const filesArray = Array.from(files)
     const newFiles: FileWithDescription[] = []
 
+    // Validar tamaño de archivos
     for (const file of filesArray) {
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        setUploadError(
+          `El archivo "${file.name}" pesa ${(file.size / (1024 * 1024)).toFixed(1)} MB. ` +
+          `Máximo permitido: ${MAX_FILE_SIZE_MB} MB (ideal para móvil: <50MB)`
+        )
+        continue
+      }
+
       const preview = URL.createObjectURL(file)
       const media_type = isVideoFile(file) ? 'video' : 'photo'
+      const sizeInMb = (file.size / (1024 * 1024)).toFixed(1)
+      
       newFiles.push({
         file,
-        description: '',
+        description: `${sizeInMb} MB`,
         preview,
         media_type
       })
+    }
+
+    if (newFiles.length === 0 && !uploadError) {
+      setUploadError('Selecciona archivos válidos')
+      return
     }
 
     setFilesWithDescriptions(newFiles)
@@ -54,63 +79,100 @@ export default function UploadButton({ onUpload }: Props) {
     )
   }
 
+  const uploadFileWithRetry = async (item: FileWithDescription, retryCount = 0): Promise<boolean> => {
+    try {
+      const fileName = item.file.name.replace(/\s/g, '_')
+      const filePath = `${crypto.randomUUID()}-${fileName}`
+      
+      // Crear un controlador de aborto con timeout
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), UPLOAD_TIMEOUT_MS)
+
+      // Subir archivo al bucket
+      const { error: uploadError } = await supabase.storage
+        .from('galeria')
+        .upload(filePath, item.file, { 
+          cacheControl: '3600', 
+          upsert: false,
+          duplex: 'half'
+        })
+
+      clearTimeout(timeoutId)
+
+      if (uploadError) {
+        if (retryCount < MAX_RETRIES) {
+          console.log(`Reintentando ${filePath}... (intento ${retryCount + 1}/${MAX_RETRIES})`)
+          // Esperar antes de reintentar
+          await new Promise(resolve => setTimeout(resolve, 2000 * (retryCount + 1)))
+          return uploadFileWithRetry(item, retryCount + 1)
+        }
+        throw new Error(`Error persistente: ${uploadError.message}`)
+      }
+
+      // Obtener URL pública
+      const { data } = supabase.storage.from('galeria').getPublicUrl(filePath)
+      const fileUrl = data.publicUrl
+
+      // Insertar registro en tabla
+      const insertPayload: any = { 
+        url: fileUrl,
+        media_type: item.media_type
+      }
+      if (item.description?.trim()) {
+        insertPayload.description = item.description.trim()
+      }
+
+      const { data: insertedData, error: insertError } = await supabase
+        .from('photos')
+        .insert([insertPayload])
+        .select()
+        .single()
+
+      if (insertError) {
+        throw new Error(`Error al guardar en BD: ${insertError.message}`)
+      }
+
+      if (insertedData) onUpload?.(insertedData)
+      return true
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido'
+      console.error('Error en subida:', errorMsg)
+      throw err
+    }
+  }
+
   const handleUploadAll = async () => {
     if (filesWithDescriptions.length === 0) return
 
     try {
       setUploading(true)
+      setUploadError(null)
+      const errors: string[] = []
 
       for (const item of filesWithDescriptions) {
-        const fileName = item.file.name.replace(/\s/g, '_')
-        const filePath = `${crypto.randomUUID()}-${fileName}`
-
-        // Subir archivo al bucket
-        const { error: uploadError } = await supabase.storage
-          .from('galeria')
-          .upload(filePath, item.file, { cacheControl: '3600', upsert: false })
-
-        if (uploadError) {
-          console.error('Error al subir archivo:', uploadError.message)
-          continue
+        try {
+          await uploadFileWithRetry(item)
+        } catch (err) {
+          const errorMsg = err instanceof Error ? err.message : 'Error desconocido'
+          errors.push(`${item.file.name}: ${errorMsg}`)
         }
-
-        // Obtener URL pública
-        const { data } = supabase.storage.from('galeria').getPublicUrl(filePath)
-        const fileUrl = data.publicUrl
-
-        // Insertar registro en tabla con descripción y tipo de media
-        const insertPayload: any = { 
-          url: fileUrl,
-          media_type: item.media_type
-        }
-        if (item.description.trim()) {
-          insertPayload.description = item.description.trim()
-        }
-
-        const { data: insertedData, error: insertError } = await supabase
-          .from('photos')
-          .insert([insertPayload])
-          .select()
-          .single()
-
-        if (insertError) {
-          console.error('Error al insertar en tabla:', insertError.message)
-          continue
-        }
-
-        // Notificar al padre (Gallery) para cada archivo subido
-        if (insertedData) onUpload?.(insertedData)
       }
 
-      // Limpiar estado
-      setFilesWithDescriptions([])
-      setShowDescriptionModal(false)
-      // Resetear el input file
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
+      if (errors.length > 0) {
+        setUploadError(
+          `Errores al subir ${errors.length} archivo(s):\n${errors.join('\n')}\n\n` +
+          `💡 Intenta:\n- Reconectar WiFi\n- Verificar conexión móvil\n- Dividir en archivos más pequeños`
+        )
+      } else {
+        setFilesWithDescriptions([])
+        setShowDescriptionModal(false)
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''
+        }
       }
     } catch (err) {
       console.error('Error general:', err)
+      setUploadError('Error general en la carga. Intenta de nuevo.')
     } finally {
       setUploading(false)
     }
@@ -130,6 +192,21 @@ export default function UploadButton({ onUpload }: Props) {
 
   return (
     <>
+      {/* Mostrar error si existe */}
+      {uploadError && (
+        <div className="fixed top-4 left-4 right-4 z-50 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg whitespace-pre-wrap max-w-md shadow-lg">
+          <div className="flex justify-between items-start">
+            <span>{uploadError}</span>
+            <button 
+              onClick={() => setUploadError(null)}
+              className="ml-2 text-red-700 hover:text-red-900"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       <label className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl cursor-pointer shadow-md">
         {uploading ? 'Subiendo...' : 'Subir fotos o videos'}
         <input 
@@ -150,6 +227,11 @@ export default function UploadButton({ onUpload }: Props) {
             <h2 className="text-xl font-bold mb-4 text-gray-800">
               Agregar descripción a {filesWithDescriptions.length} archivo{filesWithDescriptions.length !== 1 ? 's' : ''} (opcional)
             </h2>
+            
+            {/* Aviso sobre tamaño para móviles */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 text-sm text-yellow-800">
+              💡 Para móviles: Ideal mantener archivos &lt;50MB. Tienes {filesWithDescriptions.reduce((sum, item) => sum + item.file.size, 0) / (1024 * 1024) | 0}MB totales.
+            </div>
             
             <div className="space-y-4 mb-6">
               {filesWithDescriptions.map((item, index) => (
@@ -175,6 +257,9 @@ export default function UploadButton({ onUpload }: Props) {
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         {item.media_type === 'video' ? '🎥' : '📷'} {item.file.name}
+                        <span className="text-xs text-gray-500 ml-2">
+                          ({(item.file.size / (1024 * 1024)).toFixed(1)} MB)
+                        </span>
                       </label>
                       <textarea
                         value={item.description}
