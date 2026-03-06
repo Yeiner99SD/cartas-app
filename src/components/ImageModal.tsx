@@ -11,6 +11,7 @@ type Props = {
   photoId?: number
   description?: string | null
   onDescriptionUpdate?: (newDescription: string | null) => void
+  media_type?: 'photo' | 'video'
 }
 
 export default function ImageModal({ 
@@ -22,7 +23,8 @@ export default function ImageModal({
   created_at,
   photoId,
   description,
-  onDescriptionUpdate
+  onDescriptionUpdate,
+  media_type = 'photo'
 }: Props) {
   const [scale, setScale] = useState(1)
   const [isEditingDescription, setIsEditingDescription] = useState(false)
@@ -80,10 +82,12 @@ export default function ImageModal({
     setErrorMessage(null)
   }
 
-  // Toggle zoom con doble clic
+  // Toggle zoom con doble clic (solo para fotos)
   const handleDoubleClick = useCallback(() => {
-    setScale(s => s === 1 ? 1.5 : 1)
-  }, [])
+    if (media_type === 'photo') {
+      setScale(s => s === 1 ? 1.5 : 1)
+    }
+  }, [media_type])
 
   function parseAsUTC(s?: string) {
     if (!s) return null
@@ -155,15 +159,24 @@ export default function ImageModal({
           </button>
         </div>
 
-        {/* Contenedor de imagen */}
+        {/* Contenedor de imagen o video */}
         <div className="relative w-full aspect-4/3 md:aspect-[25/8] bg-black/50 rounded-lg overflow-hidden">
-          <img 
-            src={url} 
-            alt="Foto en tamaño completo" 
-            className="w-full h-full object-contain transition-transform duration-200"
-            style={{ transform: `scale(${scale})` }}
-            onDoubleClick={handleDoubleClick}
-          />
+          {media_type === 'video' ? (
+            <video 
+              src={url} 
+              controls
+              className="w-full h-full object-contain"
+              autoPlay
+            />
+          ) : (
+            <img 
+              src={url} 
+              alt="Foto en tamaño completo" 
+              className="w-full h-full object-contain transition-transform duration-200"
+              style={{ transform: `scale(${scale})` }}
+              onDoubleClick={handleDoubleClick}
+            />
+          )}
         </div>
 
         {/* Controles inferiores */}

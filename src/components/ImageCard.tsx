@@ -51,7 +51,21 @@ export default function ImageCard({ photo, onClick }: Props) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <img src={photo.url} alt="foto" className="w-full h-48 object-cover" />
+        {/* Mostrar video o imagen */}
+        {photo.media_type === 'video' ? (
+          <video src={photo.url} className="w-full h-48 object-cover" />
+        ) : (
+          <img src={photo.url} alt="foto" className="w-full h-48 object-cover" />
+        )}
+        
+        {/* Ícono de video */}
+        {photo.media_type === 'video' && (
+          <div className="absolute top-2 right-2 bg-white/80 rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        )}
         
         {/* Overlay con fecha y descripción */}
         <div 

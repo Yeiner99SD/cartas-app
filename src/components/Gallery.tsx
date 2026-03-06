@@ -115,7 +115,7 @@ export default function Gallery() {
       <h1 className="text-[#4C0967] text-3xl font-medium text-center">
         Nuestras
         <br/>
-        Fotos :))
+        Fotos y Videos :))
       </h1>
       <img src="/corazones.webp" alt="Corazón" className="w-8 h-8" />
     </div>
@@ -138,6 +138,7 @@ export default function Gallery() {
           created_at={photos[currentPhotoIndex].created_at}
           photoId={photos[currentPhotoIndex].id}
           description={photos[currentPhotoIndex].description}
+          media_type={photos[currentPhotoIndex].media_type}
           onDescriptionUpdate={(newDesc) => 
             handleDescriptionUpdate(photos[currentPhotoIndex].id, newDesc)
           }

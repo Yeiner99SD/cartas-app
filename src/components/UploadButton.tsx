@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient.ts'
 
 type Props = {
@@ -9,12 +9,22 @@ type FileWithDescription = {
   file: File
   description: string
   preview: string
+  media_type: 'photo' | 'video'
+}
+
+const isVideoFile = (file: File): boolean => {
+  const videoMimes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime']
+  const videoExtensions = ['.mp4', '.webm', '.ogv', '.mov', '.avi', '.mkv']
+  
+  return videoMimes.includes(file.type) || 
+    videoExtensions.some(ext => file.name.toLowerCase().endsWith(ext))
 }
 
 export default function UploadButton({ onUpload }: Props) {
   const [uploading, setUploading] = useState(false)
   const [filesWithDescriptions, setFilesWithDescriptions] = useState<FileWithDescription[]>([])
   const [showDescriptionModal, setShowDescriptionModal] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -25,10 +35,12 @@ export default function UploadButton({ onUpload }: Props) {
 
     for (const file of filesArray) {
       const preview = URL.createObjectURL(file)
+      const media_type = isVideoFile(file) ? 'video' : 'photo'
       newFiles.push({
         file,
         description: '',
-        preview
+        preview,
+        media_type
       })
     }
 
@@ -52,22 +64,25 @@ export default function UploadButton({ onUpload }: Props) {
         const fileName = item.file.name.replace(/\s/g, '_')
         const filePath = `${crypto.randomUUID()}-${fileName}`
 
-        // Subir imagen al bucket
+        // Subir archivo al bucket
         const { error: uploadError } = await supabase.storage
           .from('galeria')
           .upload(filePath, item.file, { cacheControl: '3600', upsert: false })
 
         if (uploadError) {
-          console.error('Error al subir imagen:', uploadError.message)
+          console.error('Error al subir archivo:', uploadError.message)
           continue
         }
 
         // Obtener URL pública
         const { data } = supabase.storage.from('galeria').getPublicUrl(filePath)
-        const imageUrl = data.publicUrl
+        const fileUrl = data.publicUrl
 
-        // Insertar registro en tabla con descripción
-        const insertPayload: any = { url: imageUrl }
+        // Insertar registro en tabla con descripción y tipo de media
+        const insertPayload: any = { 
+          url: fileUrl,
+          media_type: item.media_type
+        }
         if (item.description.trim()) {
           insertPayload.description = item.description.trim()
         }
@@ -83,13 +98,17 @@ export default function UploadButton({ onUpload }: Props) {
           continue
         }
 
-        // Notificar al padre (Gallery) para cada foto subida
+        // Notificar al padre (Gallery) para cada archivo subido
         if (insertedData) onUpload?.(insertedData)
       }
 
       // Limpiar estado
       setFilesWithDescriptions([])
       setShowDescriptionModal(false)
+      // Resetear el input file
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
     } catch (err) {
       console.error('Error general:', err)
     } finally {
@@ -102,16 +121,21 @@ export default function UploadButton({ onUpload }: Props) {
     filesWithDescriptions.forEach(item => URL.revokeObjectURL(item.preview))
     setFilesWithDescriptions([])
     setShowDescriptionModal(false)
+    // Resetear el input file
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
 
   return (
     <>
       <label className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl cursor-pointer shadow-md">
-        {uploading ? 'Subiendo...' : 'Subir fotos'}
+        {uploading ? 'Subiendo...' : 'Subir fotos o videos'}
         <input 
+          ref={fileInputRef}
           type="file" 
-          accept="image/*" 
+          accept="image/*,video/*" 
           className="hidden" 
           onChange={handleFileSelect}
           disabled={uploading || showDescriptionModal}
@@ -124,24 +148,33 @@ export default function UploadButton({ onUpload }: Props) {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4 text-gray-800">
-              Agregar descripción a {filesWithDescriptions.length} foto{filesWithDescriptions.length !== 1 ? 's' : ''} (opcional)
+              Agregar descripción a {filesWithDescriptions.length} archivo{filesWithDescriptions.length !== 1 ? 's' : ''} (opcional)
             </h2>
             
             <div className="space-y-4 mb-6">
               {filesWithDescriptions.map((item, index) => (
                 <div key={index} className="border border-gray-300 rounded-lg p-4">
                   <div className="flex gap-4 items-start">
-                    {/* Preview de imagen */}
-                    <img 
-                      src={item.preview} 
-                      alt={`Preview ${index + 1}`}
-                      className="w-24 h-24 object-cover rounded"
-                    />
+                    {/* Preview de imagen o video */}
+                    <div className="w-24 h-24 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                      {item.media_type === 'video' ? (
+                        <video 
+                          src={item.preview} 
+                          className="w-24 h-24 object-cover rounded"
+                        />
+                      ) : (
+                        <img 
+                          src={item.preview} 
+                          alt={`Preview ${index + 1}`}
+                          className="w-24 h-24 object-cover rounded"
+                        />
+                      )}
+                    </div>
                     
                     {/* Input de descripción */}
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Foto {index + 1}: {item.file.name}
+                        {item.media_type === 'video' ? '🎥' : '📷'} {item.file.name}
                       </label>
                       <textarea
                         value={item.description}
@@ -169,7 +202,7 @@ export default function UploadButton({ onUpload }: Props) {
                 disabled={uploading}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
               >
-                {uploading ? 'Subiendo...' : `Subir ${filesWithDescriptions.length} foto${filesWithDescriptions.length !== 1 ? 's' : ''}`}
+                {uploading ? 'Subiendo...' : `Subir ${filesWithDescriptions.length} archivo${filesWithDescriptions.length !== 1 ? 's' : ''}`}
               </button>
             </div>
           </div>

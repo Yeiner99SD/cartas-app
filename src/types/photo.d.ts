@@ -4,4 +4,5 @@ export type Photo = {
   created_at: string
   is_favorite: boolean
   description?: string | null
+  media_type: 'photo' | 'video'
 }
