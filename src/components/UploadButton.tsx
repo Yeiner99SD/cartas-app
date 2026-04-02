@@ -258,7 +258,7 @@ export default function UploadButton({ onUpload }: Props) {
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         {item.media_type === 'video' ? '🎥' : '📷'} {item.file.name}
                         <span className="text-xs text-gray-500 ml-2">
-                          ({(item.file.size / (1024 * 1024)).toFixed(1)} MB)
+                          
                         </span>
                       </label>
                       <textarea
