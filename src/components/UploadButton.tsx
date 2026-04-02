@@ -58,7 +58,7 @@ export default function UploadButton({ onUpload }: Props) {
       
       newFiles.push({
         file,
-        description: `${sizeInMb} MB`,
+        description: '',
         preview,
         media_type
       })
