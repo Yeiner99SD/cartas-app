@@ -134,5 +134,17 @@ export const cartas: Carta[] = [
       'Flores',
       'HeroValentin',
     ]
+  },
+  {
+    title: "Nuestro Aniversario 14/04",
+    image: "/portadaaniversario.webp",
+    slug: "aniversario",
+    from: "El hombre que más te ama",
+    to: "La mujer de mis sueños",
+    text: "Ya pasó un año desde que hablamos, y fue mi más bonita casualidad",
+    components: [
+      'AniversarioHero',
+      'CartaAniversario',
+    ]
   }
 ];
