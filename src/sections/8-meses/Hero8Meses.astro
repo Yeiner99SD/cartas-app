@@ -1,0 +1,242 @@
+---
+// DedicatoriasPlayer.astro
+// Componente reproductor de dedicatorias musicales
+// Requiere Tailwind CSS configurado en el proyecto Astro
+---
+
+<section class="relative w-full max-w-lg mx-auto px-4 py-10 sm:py-14">
+
+  <!-- Corazones flotantes de fondo -->
+  <div class="hearts-bg pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <span class="heart" style="top:5%;left:4%;font-size:18px;animation-delay:0s">♥</span>
+    <span class="heart" style="top:12%;left:88%;font-size:22px;animation-delay:1.2s">♥</span>
+    <span class="heart" style="top:48%;left:2%;font-size:15px;animation-delay:2s">♥</span>
+    <span class="heart" style="top:63%;left:92%;font-size:19px;animation-delay:0.6s">♥</span>
+    <span class="heart" style="top:80%;left:7%;font-size:16px;animation-delay:1.8s">♥</span>
+    <span class="heart" style="top:35%;left:94%;font-size:14px;animation-delay:3s">♥</span>
+    <span class="heart" style="top:88%;left:82%;font-size:17px;animation-delay:0.4s">♥</span>
+    <span class="heart" style="top:70%;left:50%;font-size:12px;animation-delay:2.5s">♥</span>
+  </div>
+
+  <!-- Header -->
+  <div class="relative z-10 text-center mb-8 sm:mb-10">
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-wide mb-3"
+        style="font-family: 'Georgia', serif; text-shadow: 0 2px 16px rgba(192,57,43,0.35)">
+      ♥ Te las dedico ♥
+    </h2>
+
+    <div class="mx-auto mb-4 h-px w-12 bg-white/30 rounded-full"></div>
+
+    <p class="text-sm sm:text-base text-white/75 italic leading-relaxed max-w-sm mx-auto">
+      Esto es solo para ti, algún día te cantaré mirándote a los ojos y dándote un besito,
+      con una guitarra, déjame practicar y mejorar mi voz :C.
+    </p>
+    <p class="mt-3 text-sm sm:text-base text-white font-semibold not-italic">
+      Te amo, feliz mes. 💜
+    </p>
+  </div>
+
+  <!-- Caja de texto dinámico -->
+  <div
+    id="lyrics-box"
+    class="relative z-10 mb-6 mx-auto w-full rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm px-6 py-5 text-center min-h-[80px] flex items-center justify-center transition-all duration-300"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    <p id="lyrics-text" class="text-white text-base sm:text-lg font-medium leading-relaxed opacity-100 transition-all duration-400">
+      Pon una canción :3
+    </p>
+  </div>
+
+  <!-- Lista de canciones -->
+  <ul class="relative z-10 flex flex-col gap-3" id="track-list" role="list">
+
+    <!-- Track 1 -->
+    <li>
+      <button
+        data-index="0"
+        class="track-btn w-full flex items-center gap-4 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-white/55 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        aria-pressed="false"
+      >
+        <span class="play-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-base transition-colors duration-200">♥</span>
+        <span class="flex-1 min-w-0">
+          <span class="block text-white font-bold text-sm sm:text-base truncate">Congratulations</span>
+          
+        </span>
+        <span class="bars flex items-end gap-[3px] h-[18px] opacity-0 transition-opacity duration-300" aria-hidden="true">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </span>
+      </button>
+    </li>
+
+   
+
+    <!-- Track 3 -->
+    <li>
+      <button
+        data-index="1"
+        class="track-btn w-full flex items-center gap-4 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-white/55 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        aria-pressed="false"
+      >
+        <span class="play-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-base transition-colors duration-200">✨</span>
+        <span class="flex-1 min-w-0">
+          <span class="block text-white font-bold text-sm sm:text-base truncate">Sparks</span>
+        
+        </span>
+        <span class="bars flex items-end gap-[3px] h-[18px] opacity-0 transition-opacity duration-300" aria-hidden="true">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </span>
+      </button>
+    </li>
+
+    <!-- Track 4 -->
+    <li>
+      <button
+        data-index="2"
+        class="track-btn w-full flex items-center gap-4 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-white/55 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        aria-pressed="false"
+      >
+        <span class="play-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-base transition-colors duration-200">🌙</span>
+        <span class="flex-1 min-w-0">
+          <span class="block text-white font-bold text-sm sm:text-base truncate">Godspeed</span>
+        </span>
+        <span class="bars flex items-end gap-[3px] h-[18px] opacity-0 transition-opacity duration-300" aria-hidden="true">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </span>
+      </button>
+    </li>
+
+  </ul>
+</section>
+
+<style>
+  /* Corazones flotantes */
+  .heart {
+    position: absolute;
+    color: #c0392b;
+    opacity: 0.45;
+    animation: floatHeart 5s ease-in-out infinite;
+    user-select: none;
+  }
+  @keyframes floatHeart {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%       { transform: translateY(-14px) scale(1.15); }
+  }
+
+  /* Barras de sonido animadas */
+  .bar {
+    width: 3px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 2px;
+    animation: barPulse 0.55s ease-in-out infinite alternate;
+  }
+  .bar:nth-child(1) { height: 5px;  animation-delay: 0s; }
+  .bar:nth-child(2) { height: 13px; animation-delay: 0.1s; }
+  .bar:nth-child(3) { height: 8px;  animation-delay: 0.2s; }
+  .bar:nth-child(4) { height: 16px; animation-delay: 0.3s; }
+  .bar:nth-child(5) { height: 9px;  animation-delay: 0.15s; }
+  @keyframes barPulse {
+    from { transform: scaleY(1); }
+    to   { transform: scaleY(0.25); }
+  }
+
+  /* Estado activo del botón */
+  .track-btn.active {
+    background: rgba(255,255,255,0.22);
+    border-color: rgba(255,255,255,0.75);
+  }
+  .track-btn.active .play-icon {
+    background: #c0392b;
+  }
+  .track-btn.active .bars {
+    opacity: 1 !important;
+  }
+
+  /* Texto dinámico */
+  #lyrics-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  const songs = [
+    {
+      text: "I see your eyes look through my soul ",
+      audio: "/audio/8 mesessing/congratulations.mp3"  // 👈 pon tu archivo en public/audio/
+    },
+    {
+      text: "My heart is yours, it´s you that i hold on to",
+      audio: "/audio/8 mesessing/sparks.mp3"           // 👈 pon tu archivo en public/audio/
+    },
+    {
+      text: "I will always love you, how i do ",
+      audio: "/audio/8 mesessing/godspeed.mp3"         // 👈 pon tu archivo en public/audio/
+    }
+  ];
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.track-btn');
+  const lyricsText = document.getElementById('lyrics-text') as HTMLElement;
+
+  // Instancia de audio única — se reutiliza para todas las canciones
+  let currentAudio: HTMLAudioElement | null = null;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const index = parseInt(btn.dataset.index ?? '0');
+      const song = songs[index];
+      const isAlreadyActive = btn.classList.contains('active');
+
+      // Reset todos los botones
+      buttons.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+
+      // Si se hace clic en el que ya sonaba → pausar y deseleccionar
+      if (isAlreadyActive) {
+        currentAudio?.pause();
+        currentAudio = null;
+        lyricsText.style.opacity = '0';
+        setTimeout(() => {
+          lyricsText.textContent = 'Pon una canción 🎵';
+          lyricsText.style.opacity = '1';
+        }, 250);
+        return;
+      }
+
+      // Parar el audio anterior
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+
+      // Activar el seleccionado
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+
+      // Reproducir nuevo audio
+      currentAudio = new Audio(song.audio);
+      currentAudio.play().catch(() => {
+        // El navegador bloqueó la reproducción automática — no pasa nada
+      });
+
+      // Cuando termina el audio, desactivar el botón
+      currentAudio.addEventListener('ended', () => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed', 'false');
+        currentAudio = null;
+      });
+
+      // Animar el texto
+      lyricsText.style.opacity = '0';
+      lyricsText.style.transform = 'translateY(8px)';
+
+      setTimeout(() => {
+        lyricsText.textContent = song.text;
+        lyricsText.style.opacity = '1';
+        lyricsText.style.transform = 'translateY(0)';
+      }, 250);
+    });
+  });
+</script>

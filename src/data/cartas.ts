@@ -146,5 +146,16 @@ export const cartas: Carta[] = [
       'AniversarioHero',
       'CartaAniversario',
     ]
+  },
+  {
+    title: "8 meses, esta cancion (es) es para ti",
+    image: "/ochomeses.webp",
+    slug: "8-meses",
+    from: "Tu Yei",
+    to: "Mi niña hermosa :3 ",
+    text: "Felices 8 meses mi amor, esta canción es para ti",
+    components: [
+      'Hero8Meses',
+    ]
   }
 ];
