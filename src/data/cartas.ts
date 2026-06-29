@@ -157,5 +157,17 @@ export const cartas: Carta[] = [
     components: [
       'Hero8Meses',
     ]
+  },
+  {
+    title: "10 meses",
+    image: "/10meses.png",
+    slug: "10-meses",
+    from: "Tu Yei",
+    to: "Mi amor",
+    text: "Gracias por estos 10 meses tan especiales",
+    components: [
+      'Hero10Meses',
+      'Content10Meses',
+    ]
   }
 ];
