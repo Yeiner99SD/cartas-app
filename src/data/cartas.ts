@@ -169,5 +169,27 @@ export const cartas: Carta[] = [
       'Hero10Meses',
       'Content10Meses',
     ]
-  }
+  },
+  {
+    title: "11 Meses",
+    image: "/11meses.webp",
+    slug: "11-meses",
+    from: "Tu Novio",
+    to: "Mi amor",
+    text: "Felices 11 meses mi amor, gracias por hacerme tan feliz",
+    components: [
+      'Hero11Meses',] 
+  },
+  {
+  title: "6 de Agosto",
+  image: "/6agosto.webp", // el banner que quieras mostrar en el listado
+  slug: "6-agosto",
+  from: "Tu Yei",
+  to: "Mi amor",
+  text: "Un vuelo, 10 horas",
+  components: [
+  '6agosto'
+  ], // no se usa para esta carta, el contenido vive en Supabase
+  },
+  
 ];

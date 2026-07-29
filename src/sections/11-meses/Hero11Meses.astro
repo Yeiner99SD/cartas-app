@@ -1,0 +1,279 @@
+---
+// CartaMes11.astro
+// Carta de 11 meses en un solo componente: hero tipo "llamada en
+// curso", el texto completo de la carta con el registro de
+// videollamadas, y un reproductor flotante para la canción (sin
+// autoplay, ella decide darle play).
+//
+// 👉 Pendientes:
+//   1) Sube el mp3 a `public/audio/11-meses.mp3` (o cambia SONG_SRC).
+//   2) Este componente no trae fuentes: importa Fraunces, Newsreader,
+//      JetBrains Mono e Inter donde cargues tus fuentes globales
+//      (o deja el <style is:global> del final si no tienes dónde).
+
+const SONG_SRC = "/public/audio/Mi Suerte.mp3"; // TODO: reemplazar por el archivo real
+const SONG_TITLE = "Eres mi suerte";
+const SONG_SUBTITLE = "Reproducela y ve leyendo tu cartita, mi amor 💕";
+
+const llamadas = [
+  "viendo pelis",
+  "jugando",
+  "cocinando",
+  "hablando de la vida",
+  "estudiando",
+  "haciendo cositas",
+  "a la hora del almuerzo, desde el trabajo",
+  "antes de ir a trabajar",
+  "al salir de trabajar, ya de noche",
+  "a escondidas, mientras trabajaba",
+  "sin hacer nada",
+  "saliendo juntos, aunque fuera en pantalla",
+  "cortas, largas, pensando en cuándo nos veríamos",
+  "tristes",
+  "discutiendo",
+  "mientras tú viajabas",
+  "cuando salías del insti",
+  "cuando salías del trabajo",
+  "en algún chance improvisado",
+  "nuestro diciembre, cuando leí esa carta",
+  "haciendo el amor",
+  "escuchando música",
+  "durmiendo, sin colgar",
+];
+---
+
+<section class="relative overflow-hidden bg-[#10121c] px-6 py-24 sm:py-28">
+  <!-- resplandor de pantalla en la oscuridad -->
+  <div
+    class="pointer-events-none absolute left-1/2 top-0 h-[36rem] w-[36rem] -translate-x-1/2 -translate-y-1/3 rounded-full bg-[#d9a441] opacity-[0.10] blur-[120px]"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(#ffffff_1px,transparent_1px)] [background-size:22px_22px]"
+    aria-hidden="true"
+  ></div>
+
+  <!-- HERO: llamada en curso -->
+  <div class="relative mx-auto max-w-xl">
+    <div
+      class="flex items-center justify-center gap-2 text-[0.65rem] uppercase tracking-[0.35em] text-[#c9a8ae] sm:text-xs"
+      style="font-family: 'Inter', sans-serif;"
+    >
+      <span class="relative flex h-2 w-2">
+        <span
+          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e8a0a0] opacity-75 motion-reduce:hidden"
+        ></span>
+        <span class="relative inline-flex h-2 w-2 rounded-full bg-[#e8a0a0]"></span>
+      </span>
+      Dania - Gracias por llegar a mi vida
+    </div>
+
+    <h1
+      class="mt-5 text-center text-[17vw] leading-[0.95] text-[#f6ede0] sm:text-8xl"
+      style="font-family: 'Fraunces', serif; font-optical-sizing: auto; font-weight: 380;"
+    >
+      11 <span class="italic text-[#d9a441]">meses</span>
+    </h1>
+
+   
+
+  
+
+  <!-- CARTA: sobre papel cálido -->
+  <div class="relative mx-auto mt-16 max-w-2xl rounded-[28px] bg-[#f6ede0] p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)] sm:p-12">
+    <p class="text-xs uppercase tracking-[0.3em] text-[#b48b52]" style="font-family: 'Inter', sans-serif;">
+      Para Dania · mes 11
+    </p>
+
+    <div
+      class="mt-6 space-y-6 text-[15.5px] leading-[1.85] text-[#3a3128] sm:text-[17px]"
+      style="font-family: 'Newsreader', serif;"
+    >
+      <p>Hola mi amor, mi novia hermosa.</p>
+
+      <p>
+        Hay algo que siempre he estado haciendo desde que te conocí, y es
+        hacer una carta demostrando cada mes que eres lo más especial para
+        mí, y eso nunca, nunca va a cambiar. Hoy que cumplimos 11 meses, le
+        doy gracias a Dios por hacerte mía, porque tú y yo somos un amor que
+        nació de algo difícil e inesperado, algo que para los dos no fue lo
+        que pensamos que sería ahora. Pero, aun así, estamos el uno para el
+        otro y hoy daría todo por ti. Quiero hacerte la mujer más feliz del
+        mundo cada día. Lo intentamos cada día y se dio de la mejor manera, y
+        a día de hoy queda muy poco, pero muy poco, para que se cumpla uno de
+        nuestros mayores sueños, el cual es vernos.
+      </p>
+
+      <p>
+        Gracias por estos 11 meses tan hermosos. No te puedo dejar de
+        agradecer cada momento, cada sonrisa, cada instante vivido contigo es
+        oro. Estos 11 meses, probablemente, han sido los más bellos de mi
+        vida. Mi Dania, contigo he aprendido muchas cosas, pero lo más
+        valioso, y te lo voy a recalcar siempre, es que aprendí a amar. Amar
+        es el verdadero significado de vivir la vida. Es que amando sabes que
+        estás luchando por algo todos los días; amando aprendes de esa
+        persona y también aprendes del amor. Tú tienes muchas cosas que a mí
+        me complementan y quiero seguir amándote cada día de mi vida. El amar
+        y amarte me ha hecho crecer como persona, y me hace seguir creciendo
+        cada día. Te prometo que todos los días que te levantes vas a sentir
+        que alguien te ama, y tu amor hacia mí lo voy a recibir de la mejor
+        manera. Te amo hoy y cada día, mi amor.
+      </p>
+
+      <p>
+        Me ha encantado compartir estos 11 meses virtuales a tu lado, y voy a
+        seguir disfrutando de aquí en adelante los meses presenciales. Aún
+        recuerdo nuestro primer mes y la forma en la que nos fuimos
+        enamorando 😭💕💕.
+      </p>
+    </div>
+
+    <!-- registro de llamadas: el párrafo de "nuestras videollamadas..." -->
+    <div class="my-8 rounded-2xl border border-[#e3d5bd] bg-[#fbf6ec] p-5 sm:p-7">
+     
+
+      <ul class="mt-3 divide-y divide-[#ecdfc7]">
+        {llamadas.map((item) => (
+          <li class="flex items-start gap-3 py-2.5">
+           
+            <span class="text-[13.5px] leading-snug text-[#5c4a3a] sm:text-sm" style="font-family: 'Newsreader', serif;">
+              {item}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="space-y-6 text-[15.5px] leading-[1.85] text-[#3a3128] sm:text-[17px]" style="font-family: 'Newsreader', serif;">
+      <p>
+        Dania, son 11 meses increíbles y te agradezco por absolutamente todo.
+        Aún sé que fueron muchísimas cosas que no caben en esta carta.
+      </p>
+
+      <p>
+        De ahora en adelante te voy a conocer de una manera muy distinta,
+        pero con muchas ganas de compartir mi vida contigo, poder abrazarte,
+        besarte, llevarte de la mano, reír contigo viendo cualquier cosa. Es
+        imposible terminar de escribir todo lo que quiero que pase.
+      </p>
+
+      <p>
+        Estos 11 meses han sido increíbles y hoy es el último mes de una
+        etapa demasiado <span class="uppercase">hermosa</span>. Gracias, pero
+        gracias de verdad, Dania. Te amo mucho y siempre te amaré.
+      </p>
+    </div>
+
+    <div class="mt-10 border-t border-dashed border-[#d8c6a8] pt-6">
+      <p
+        class="text-right text-2xl text-[#a8506b] sm:text-3xl"
+        style="font-family: 'Fraunces', serif; font-style: italic; font-weight: 460;"
+      >
+        Felices 11 meses, mi amor,
+        <br />
+        mi 29,5. 💕
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- REPRODUCTOR: botón flotante, sin autoplay -->
+<div
+  data-song-player
+  class="fixed inset-x-0 bottom-5 z-50 flex justify-center px-4 sm:inset-x-auto sm:bottom-6 sm:right-6 sm:justify-end"
+>
+  <button
+    type="button"
+    data-play-toggle
+    aria-pressed="false"
+    class="flex w-full max-w-sm items-center gap-3 rounded-full border border-[#e3d5bd] bg-[#f6ede0]/95 px-4 py-3 shadow-[0_18px_45px_-15px_rgba(0,0,0,0.5)] backdrop-blur transition hover:bg-[#f6ede0] sm:w-auto"
+  >
+    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#a8506b] text-[#f6ede0]" aria-hidden="true">
+      <svg data-icon-play class="h-3.5 w-3.5 translate-x-[1px]" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7Z" />
+      </svg>
+      <svg data-icon-pause class="hidden h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+      </svg>
+    </span>
+
+    <span class="min-w-0 text-left" style="font-family: 'Inter', sans-serif;">
+      <span class="block truncate text-sm font-medium text-[#3a3128]">{SONG_TITLE}</span>
+      <span data-player-status class="block truncate text-xs text-[#a8875f]">{SONG_SUBTITLE}</span>
+    </span>
+
+    <span class="ml-auto flex h-5 items-end gap-[2.5px]" aria-hidden="true">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <span
+          data-eq-bar
+          class="w-[2.5px] rounded-full bg-[#a8506b]/70"
+          style={`height: 6px; animation: song-eq 0.9s ease-in-out ${i * 0.15}s infinite; animation-play-state: paused;`}
+        />
+      ))}
+    </span>
+  </button>
+
+  <audio data-audio preload="none" src={SONG_SRC}></audio>
+</div>
+
+<style>
+  @keyframes eq {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+  }
+  @keyframes song-eq {
+    0%, 100% { height: 5px; }
+    50% { height: 18px; }
+  }
+</style>
+
+<!--
+  Si tu proyecto no carga fuentes globalmente todavía, descomenta esto
+  (o mejor, muévelo a tu Layout para no repetirlo en cada página):
+
+  <style is:global>
+    @import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap");
+  </style>
+-->
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-song-player]").forEach((player) => {
+    const audio = player.querySelector<HTMLAudioElement>("[data-audio]");
+    const button = player.querySelector<HTMLButtonElement>("[data-play-toggle]");
+    const status = player.querySelector<HTMLElement>("[data-player-status]");
+    const iconPlay = player.querySelector<SVGElement>("[data-icon-play]");
+    const iconPause = player.querySelector<SVGElement>("[data-icon-pause]");
+    const bars = player.querySelectorAll<HTMLElement>("[data-eq-bar]");
+    const originalStatus = status?.textContent ?? "";
+
+    if (!audio || !button) return;
+
+    const setPlayingUI = (isPlaying: boolean) => {
+      button.setAttribute("aria-pressed", String(isPlaying));
+      iconPlay?.classList.toggle("hidden", isPlaying);
+      iconPause?.classList.toggle("hidden", !isPlaying);
+      bars.forEach((bar) => {
+        bar.style.animationPlayState = isPlaying ? "running" : "paused";
+      });
+      if (status) {
+        status.textContent = isPlaying ? "Sonando ahora…" : originalStatus;
+      }
+    };
+
+    button.addEventListener("click", async () => {
+      try {
+        if (audio.paused) {
+          await audio.play();
+        } else {
+          audio.pause();
+        }
+      } catch {
+        if (status) status.textContent = "Mi suerte";
+      }
+    });
+
+    audio.addEventListener("play", () => setPlayingUI(true));
+    audio.addEventListener("pause", () => setPlayingUI(false));
+    audio.addEventListener("ended", () => setPlayingUI(false));
+  });
+</script>
