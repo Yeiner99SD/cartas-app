@@ -7,6 +7,7 @@ type Stop = {
   title: string;
   body: string;
   song_label: string | null;
+  song_url: string | null;
   photo_url: string | null;
   is_landing: boolean;
 };
@@ -46,7 +47,7 @@ export default function VueloTimeline({
       ? `Faltan ${formatCountdown(-elapsed)} para el despegue`
       : elapsed < 10 * HOUR
       ? `En vuelo — llegamos en ${formatCountdown(10 * HOUR - elapsed)}`
-      : '¡Aterrizamos! Bienvenida a Madrid ❤';
+      : '¡Aterrizamamos, ya te veo mi amor';
 
   const flightDate = new Date(departureAt).toLocaleDateString('es-ES', {
     day: '2-digit', month: 'short',
@@ -140,9 +141,21 @@ export default function VueloTimeline({
                       <p className="mt-2 text-sm leading-relaxed text-white/90">{stop.body}</p>
                       {stop.photo_url && <img src={stop.photo_url} alt="" className="mt-3 rounded-lg" />}
                       {stop.song_label && (
-                        <span className="mt-3 inline-block rounded-full border border-yellow-300/40 px-3 py-1 font-mono text-[11px] text-yellow-300">
-                          ♪ {stop.song_label}
-                        </span>
+                        stop.song_url ? (
+                          <a
+                            href={stop.song_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 inline-flex items-center gap-2 rounded-full border border-yellow-300/40 px-3 py-1 font-mono text-[11px] text-yellow-300 transition hover:bg-yellow-300/10"
+                          >
+                            <span>♪</span>
+                            <span>{stop.song_label}</span>
+                          </a>
+                        ) : (
+                          <span className="mt-3 inline-block rounded-full border border-yellow-300/40 px-3 py-1 font-mono text-[11px] text-yellow-300">
+                            ♪ {stop.song_label}
+                          </span>
+                        )
                       )}
                     </>
                   ) : (
@@ -158,32 +171,7 @@ export default function VueloTimeline({
       </div>
 
       {/* ---- CONTROL DE VISTA PREVIA (quitar antes de mandarla) ---- */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-white/15 bg-black/90 px-5 py-3 backdrop-blur">
-        <div className="mx-auto flex max-w-xl items-center gap-3">
-          <button
-            onClick={() => setPreviewOffset(previewOffset === null ? 0 : null)}
-            className="rounded-full border border-yellow-300/50 px-3 py-1 font-mono text-[11px] text-yellow-300"
-          >
-            {previewOffset === null ? 'Activar vista previa' : 'Volver a tiempo real'}
-          </button>
-          {previewOffset !== null && (
-            <>
-              <input
-                type="range"
-                min={-6}
-                max={11}
-                step={0.25}
-                value={previewOffset}
-                onChange={(e) => setPreviewOffset(parseFloat(e.target.value))}
-                className="flex-1"
-              />
-              <span className="w-14 text-right font-mono text-[11px] text-yellow-300">
-                {previewOffset >= 0 ? '+' : ''}{previewOffset}h
-              </span>
-            </>
-          )}
-        </div>
-      </div>
+      
     </div>
   );
 }
