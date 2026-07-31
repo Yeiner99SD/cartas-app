@@ -11,17 +11,17 @@
   "dependencies": {
     "@astrojs/check": "^0.9.9",
     "@astrojs/react": "^4.4.0",
-    "@astrojs/vercel": "^7.8.0",
+    "@astrojs/vercel": "8.2.11",
     "@fontsource-variable/mulish": "^5.2.6",
     "@fontsource/kalam": "^5.2.8",
-    "@supabase/supabase-js": "^2.58.0",
+    "@supabase/supabase-js": "^2.111.0",
     "@tailwindcss/vite": "^4.1.11",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "astro": "^5.12.8",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.11",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "astro": "^5.18.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
   }
 }
