@@ -1,13 +1,38 @@
 ---
-export const prerender = false;
+  export const prerender = false;
 
-import CartaLayout from '../../layouts/LayoutCarta.astro';
----
+  import CartaLayout from '../../layouts/LayoutCarta.astro';
+  import VueloTimeline from '../../components/VueloTimeline';
+  import { supabase } from '../../lib/supabaseClient';
 
-<CartaLayout title="6 de Agosto" description="Un vuelo, 10 horas">
-  <div class="min-h-screen flex items-center justify-center px-4">
-    <p class="text-white text-center text-lg sm:text-xl font-medium">
-      Esta carta todavía no está lista, pero ya casi, felices 11 meses amor 🛫
-    </p>
-  </div>
-</CartaLayout>
+  const { data: meta, error: metaError } = await supabase
+    .from('cartas_meta')
+    .select('*')
+    .eq('slug', '6-agosto')
+    .single();
+
+  const { data: stops, error: stopsError } = await supabase
+    .from('carta_stops')
+    .select('*')
+    .eq('carta_slug', '6-agosto')
+    .order('sort_order');
+
+  if (metaError) console.error('Error cargando meta:', metaError);
+  if (stopsError) console.error('Error cargando stops:', stopsError);
+  ---
+
+  <CartaLayout title="6 de Agosto" description="Un vuelo, 10 horas">
+    {meta ? (
+      <VueloTimeline
+        client:load
+        departureAt={meta.departure_at}
+        routeFrom={meta.route_from}
+        routeTo={meta.route_to}
+        stops={stops || []}
+        passenger={meta.passenger}
+        subject={meta.subject}
+      />
+    ) : (
+      <p class="text-white text-center pt-20">Esta carta todavía no está lista 🛫</p>
+    )}
+  </CartaLayout>
